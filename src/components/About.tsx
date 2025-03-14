@@ -23,10 +23,11 @@ const About = () => {
             <div className="w-full md:w-2/3">
               <h3 className="text-2xl font-semibold mb-4">Game Programmer & Developer</h3>
               <p className="text-muted-foreground mb-4">
-                I'm a passionate game programmer with expertise in Unity and Unreal Engine. 
-                With over 5 years of experience, I've worked on various game projects ranging 
-                from mobile games to VR experiences. My expertise includes gameplay mechanics, 
-                UI systems, and optimization for various platforms.
+                Hi there! I'm a social and organized game programming graduate with a year of 
+                hands-on experience in C++ and Unreal Engine 5, as well as a Certified Scrum Master.
+                
+                Coming from a background in aviation, I'm exploring my life long dream of working 
+                on developing video games. I thrive on problem-solving and working in a team.
               </p>
               <p className="text-muted-foreground mb-4">
                 I love solving complex problems and creating engaging interactive experiences 
