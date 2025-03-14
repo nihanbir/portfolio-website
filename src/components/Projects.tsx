@@ -9,7 +9,7 @@ const projectsData = [
     id: "1",
     title: "Space Explorer VR",
     description: "A virtual reality game that allows players to explore space and interact with celestial bodies. Features realistic physics and immersive environments.",
-    technologies: ["Unity", "C#", "VR", "Shader Programming"],
+    technologies: ["Unity", "C#"],
     images: [
       { 
         url: "https://images.unsplash.com/photo-1614732414444-096e5f1122d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80", 
@@ -71,7 +71,7 @@ public class GravityAttractor : MonoBehaviour
     id: "2",
     title: "Pixel Platformer",
     description: "A 2D platformer game with retro pixel art aesthetics. Features procedurally generated levels, collectibles, and challenging obstacles.",
-    technologies: ["Unity", "C#", "2D Graphics", "Procedural Generation"],
+    technologies: ["Unity", "C#"],
     images: [
       { 
         url: "https://images.unsplash.com/photo-1642352902570-9626d525442a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1080&q=80", 

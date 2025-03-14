@@ -29,21 +29,21 @@ const Header = () => {
     >
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold mr-4 text-primary">John Doe</h1>
+          <h1 className="text-2xl font-bold mr-4 text-primary">Nihan Bir</h1>
           <span className="hidden md:inline-block text-muted-foreground">Game Programmer</span>
         </div>
         
         <div className="flex items-center space-x-4">
           <div className="hidden md:flex items-center space-x-4">
-            <a href="mailto:john@example.com" className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center">
+            <a href="mailto:nihan.bir@gmail.com" className="text-muted-foreground hover:text-primary transition-colors duration-300 flex items-center">
               <Mail className="w-4 h-4 mr-2" />
-              <span>john@example.com</span>
+              <span>nihan.bir@gmail.com</span>
             </a>
             <div className="flex space-x-2">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-primary transition-colors">
+              <a href="https://github.com/nihanbir" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-primary transition-colors">
                 <Github size={20} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-primary transition-colors">
+              <a href="https://www.linkedin.com/in/nihanbir/" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-primary transition-colors">
                 <Linkedin size={20} />
               </a>
             </div>

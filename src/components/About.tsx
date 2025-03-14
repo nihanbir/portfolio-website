@@ -13,8 +13,8 @@ const About = () => {
             <div className="w-full md:w-1/3 flex justify-center">
               <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-primary/30 shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80" 
-                  alt="John Doe" 
+                  src="src/components/media/about/me.jpg" 
+                  alt="Nihan Bir" 
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -25,23 +25,23 @@ const About = () => {
               <p className="text-muted-foreground mb-4">
                 Hi there! I'm a social and organized game programming graduate with a year of 
                 hands-on experience in C++ and Unreal Engine 5, as well as a Certified Scrum Master.
-                
-                Coming from a background in aviation, I'm exploring my life long dream of working 
-                on developing video games. I thrive on problem-solving and working in a team.
               </p>
               <p className="text-muted-foreground mb-4">
-                I love solving complex problems and creating engaging interactive experiences 
-                that push the boundaries of what's possible in game development. When I'm not 
-                coding, you can find me participating in game jams or exploring the latest 
-                trends in the gaming industry.
+                Coming from a background in aviation, I'm exploring my life long dream of working
+                on developing video games. I thrive on problem-solving and working in a team.
               </p>
               <div className="flex flex-wrap gap-2 mt-6">
                 <span className="tech-tag bg-muted text-muted-foreground">Unity</span>
                 <span className="tech-tag bg-muted text-muted-foreground">Unreal Engine</span>
+                <span className="tech-tag bg-muted text-muted-foreground">Blueprints</span>
                 <span className="tech-tag bg-muted text-muted-foreground">C#</span>
                 <span className="tech-tag bg-muted text-muted-foreground">C++</span>
-                <span className="tech-tag bg-muted text-muted-foreground">JavaScript</span>
-                <span className="tech-tag bg-muted text-muted-foreground">WebGL</span>
+                <span className="tech-tag bg-muted text-muted-foreground">SDL</span>
+                <span className="tech-tag bg-muted text-muted-foreground">Trello</span>
+                <span className="tech-tag bg-muted text-muted-foreground">Jira</span>
+                <span className="tech-tag bg-muted text-muted-foreground">Confluence</span>
+                <span className="tech-tag bg-muted text-muted-foreground">Github</span>
+
               </div>
             </div>
           </div>
