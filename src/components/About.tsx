@@ -1,6 +1,8 @@
 
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import myImage from 'media/about/me.jpg';
+
 
 const About = () => {
   return (
@@ -12,9 +14,9 @@ const About = () => {
           <div className="flex flex-col md:flex-row gap-8 items-center">
             <div className="w-full md:w-1/3 flex justify-center">
               <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-primary/30 shadow-lg">
-                <img 
-                  src="src/components/media/about/me.jpg" 
-                  alt="Nihan Bir" 
+                <img
+                    src={`${import.meta.env.BASE_URL}media/about/me.jpg`}
+                    alt="Nihan Bir" 
                   className="w-full h-full object-cover"
                 />
               </div>
