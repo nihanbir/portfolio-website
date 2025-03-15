@@ -48,10 +48,16 @@ const Header = () => {
               </a>
             </div>
           </div>
-          
-          <Button variant="default" size="sm" className="bg-primary hover:bg-primary/80">
-            <Download className="w-4 h-4 mr-2" />
-            <span>Download CV</span>
+
+          <Button
+              variant="default"
+              size="sm"
+              className="bg-primary hover:bg-primary/80"
+              onClick={() => window.open("https://drive.google.com/file/d/1A6_HwBJxGN1WgQ2RpU-nieYb4UAETG_P/view?usp=sharing", 
+                  "_blank", 
+                  "noopener,noreferrer")}
+          >
+            <span>View CV</span>
           </Button>
         </div>
       </div>
