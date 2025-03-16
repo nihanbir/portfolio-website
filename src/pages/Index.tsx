@@ -7,6 +7,7 @@ import { projects, getAllTechnologies } from '@/data/projects';
 import { Project } from '@/data';
 import { ChevronRight, ChevronLeft, Download, Mail, Linkedin } from 'lucide-react';
 import Footer from '@/components/Footer';
+import About from "@/components/About.tsx";
 
 const Index = () => {
     const [expandedProject, setExpandedProject] = useState<string | null>(null);
@@ -43,38 +44,9 @@ const Index = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            <Header />
-
-            <main className="container mx-auto pb-20">
-                <section id="about" className="py-16 md:py-24">
-                    <div className="max-w-3xl mx-auto px-4">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                            Game Programmer <span className="text-primary">Portfolio</span>
-                        </h1>
-                        <p className="text-xl mb-8 text-foreground/80">
-                            I'm a passionate game programmer with experience in Unity, Unreal Engine,
-                            and web-based game technologies. I specialize in creating engaging gameplay
-                            mechanics, optimizing performance, and implementing complex systems.
-                        </p>
-                        <div className="flex items-center gap-4">
-                            <a
-                                href="#projects"
-                                className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-                            >
-                                View Projects
-                                <ChevronRight className="ml-2 h-4 w-4" />
-                            </a>
-                            <a
-                                href="/resume.pdf"
-                                className="inline-flex items-center px-6 py-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
-                            >
-                                Resume
-                                <Download className="ml-2 h-4 w-4" />
-                            </a>
-                        </div>
-                    </div>
-                </section>
-
+            <Header/>
+            <main className="pt-24">
+                <About/>
                 <section id="projects" className="py-12">
                     <div className="flex justify-between flex-col md:flex-row">
                         <div className="md:hidden mb-6 px-4">
@@ -128,37 +100,9 @@ const Index = () => {
                         </div>
                     </div>
                 </section>
-
-                <section id="contact" className="py-16 md:py-24">
-                    <div className="max-w-3xl mx-auto px-4 text-center">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-6">Let's Work Together</h2>
-                        <p className="text-lg mb-8 text-foreground/80">
-                            I'm currently available for freelance projects, full-time positions,
-                            or collaborations on interesting game development projects.
-                        </p>
-                        <div className="inline-flex items-center justify-center space-x-4">
-                            <a
-                                href="mailto:nihan.bir@gmail.com"
-                                className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-                            >
-                                <Mail className="mr-2 h-5 w-5" />
-                                Email Me
-                            </a>
-                            <a
-                                href="https://linkedin.com/in/nihanbir/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center px-6 py-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
-                            >
-                                <Linkedin className="mr-2 h-5 w-5" />
-                                LinkedIn
-                            </a>
-                        </div>
-                    </div>
-                </section>
             </main>
 
-            <Footer />
+            <Footer/>
         </div>
     );
 };

@@ -18,6 +18,20 @@ export function ProjectNavigation({
                                   }: ProjectNavigationProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
 
+    // Check for mobile on initial render
+    useEffect(() => {
+        const checkMobile = () => {
+            if (window.innerWidth < 768) {
+                setIsCollapsed(true);
+            }
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const scrollToProject = (projectId: string) => {
         onProjectSelect(projectId);
 
@@ -58,20 +72,20 @@ export function ProjectNavigation({
                         <button
                             key={project.id}
                             className={cn(
-                                "nav-button",
-                                expandedProject === project.id && "active",
-                                isCollapsed ? "justify-center px-2" : "pl-3"
+                                "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors",
+                                expandedProject === project.id && "active bg-sidebar-accent bg-opacity-30",
+                                isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start"
                             )}
                             onClick={() => scrollToProject(project.id)}
                             title={isCollapsed ? project.title : undefined}
                         >
-                            <Monitor size={isCollapsed ? 20 : 16} className="flex-shrink-0" />
+                            <Monitor size={isCollapsed ? 20 : 16} className="flex-shrink-0 text-sidebar-foreground" />
                             <span className={cn(
-                                "ml-2 truncate text-left transition-opacity duration-300",
+                                "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
                                 isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
                             )}>
-                {project.title}
-              </span>
+                                {project.title}
+                            </span>
                         </button>
                     ))}
                 </div>

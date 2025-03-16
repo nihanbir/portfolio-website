@@ -11,6 +11,7 @@ interface ProjectFilterProps {
 export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: ProjectFilterProps) {
     const [localSelectedTechs, setLocalSelectedTechs] = useState<string[]>(selectedTechs);
 
+    // Update local state when parent state changes
     useEffect(() => {
         setLocalSelectedTechs(selectedTechs);
     }, [selectedTechs]);
@@ -33,6 +34,7 @@ export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: P
 
     return (
         <div className="mb-8">
+            <h2 className="text-3xl font-bold mb-8 text-primary">Projects</h2>
             <h3 className="text-xl font-semibold mb-4">Filter by Technologies</h3>
             <div className="flex flex-wrap gap-2">
                 {technologies.map((tech) => (
@@ -40,17 +42,20 @@ export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: P
                         key={tech}
                         onClick={() => toggleTech(tech)}
                         className={cn(
-                            "tech-tag",
-                            selectedTechs.includes(tech) ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                            "px-3 py-1 rounded-full text-sm font-medium transition-colors",
+                            localSelectedTechs.includes(tech)
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground hover:bg-muted/80"
                         )}
+                        aria-pressed={localSelectedTechs.includes(tech)}
                     >
                         {tech}
                     </button>
                 ))}
-                {selectedTechs.length > 0 && (
+                {localSelectedTechs.length > 0 && (
                     <button
                         onClick={clearFilters}
-                        className="tech-tag bg-destructive/10 text-destructive hover:bg-destructive/20"
+                        className="px-3 py-1 rounded-full text-sm font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
                     >
                         Clear All
                     </button>
