@@ -18,6 +18,8 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
     const contentRef = useRef<HTMLDivElement>(null);
 
     const [showCodeSnippets, setShowCodeSnippets] = useState(false);
+    const [showAdditionalText, setShowAdditionalText] = useState(false);
+    
 
     const handleToggle = () => {
         onToggleExpand();
@@ -31,6 +33,11 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         }
     }, [isExpanded, project, showCodeSnippets]);
 
+    // Function to handle image errors
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+        e.currentTarget.src = '/api/placeholder/400/300';
+    };
+
     return (
         <div
             id={`project-${project.id}`}
@@ -41,27 +48,61 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         >
             <div className="p-4 sm:p-6">
                 <div className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                        <h2 className="text-2xl font-bold text-primary">{project.title}</h2>
-                        <button
-                            onClick={handleToggle}
-                            className="p-1 rounded-full hover:bg-muted transition-colors"
-                            aria-label={isExpanded ? "Collapse project" : "Expand project"}
-                        >
-                            {isExpanded ? (
-                                <ChevronUp className="text-primary" />
-                            ) : (
-                                <ChevronDown className="text-primary" />
-                            )}
-                        </button>
-                    </div>
+                    <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
+                        <div className="flex flex-col space-y-2 flex-grow">
+                            <h2 className="text-2xl font-bold text-primary">{project.title}</h2>
+                            <div className="flex flex-wrap gap-2">
+                                {project.technologies.map((tech) => (
+                                    <span key={tech} className="tech-tag">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
 
-                    <div className="mb-4 flex flex-wrap gap-2">
-                        {project.technologies.map((tech) => (
-                            <span key={tech} className="tech-tag">
-                                {tech}
-                            </span>
-                        ))}
+                        {/* Mini Gallery for collapsed state */}
+                        {!isExpanded && (
+                            <div className="flex-shrink-0 flex items-center gap-2">
+                                <div className="h-14 w-14 rounded-md overflow-hidden shadow-sm">
+                                    <img
+                                        src={project.images.main}
+                                        alt={`${project.title} main image`}
+                                        className="h-full w-full object-cover"
+                                        onError={handleImageError}
+                                    />
+                                </div>
+                                <div className="flex gap-2">
+                                    {project.images.gallery.slice(0, 2).map((image, index) => (
+                                        <div key={index} className="h-14 w-14 rounded-md overflow-hidden shadow-sm">
+                                            <img
+                                                src={image}
+                                                alt={`${project.title} preview ${index + 1}`}
+                                                className="h-full w-full object-cover"
+                                                onError={handleImageError}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                                <button
+                                    onClick={handleToggle}
+                                    className="p-2 rounded-full hover:bg-muted transition-colors flex-shrink-0"
+                                    aria-label={isExpanded ? "Collapse project" : "Expand project"}
+                                >
+                                    <ChevronDown className="text-primary" />
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Just the toggle button for expanded state */}
+                        {isExpanded && (
+                            <button
+                                onClick={handleToggle}
+                                className="p-2 rounded-full hover:bg-muted transition-colors"
+                                aria-label="Collapse project"
+                            >
+                                <ChevronUp className="text-primary" />
+                            </button>
+                        )}
                     </div>
 
                     <p className="mb-4 text-muted-foreground">{project.shortDescription}</p>
@@ -87,37 +128,34 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             <p className="text-foreground/90 leading-relaxed">{project.fullDescription}</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                             <div className="space-y-4">
                                 <h3 className="text-xl font-semibold">Project Details</h3>
-                                
-                                <div className="flex items-center text-sm">
-                                    <span className="font-medium mr-2">Role:</span>
-                                    <span>{project.role}</span>
-                                </div>
-                                
                                 <div className="space-y-2">
                                     <div className="flex items-center text-sm">
-                                        <Monitor size={16} className="mr-2 text-primary"/>
+                                        <Monitor size={16} className="mr-2 text-primary" />
                                         <span className="font-medium mr-2">Platform:</span>
                                         <span>{project.platform || 'Not specified'}</span>
                                     </div>
 
                                     <div className="flex items-center text-sm">
-                                        <Calendar size={16} className="mr-2 text-primary"/>
+                                        <Calendar size={16} className="mr-2 text-primary" />
                                         <span className="font-medium mr-2">Duration:</span>
                                         <span>{project.duration}</span>
                                     </div>
 
                                     {project.teamSize && (
                                         <div className="flex items-center text-sm">
-                                            <Users size={16} className="mr-2 text-primary"/>
+                                            <Users size={16} className="mr-2 text-primary" />
                                             <span className="font-medium mr-2">Team Size:</span>
                                             <span>{project.teamSize}</span>
                                         </div>
                                     )}
 
-
+                                    <div className="flex items-center text-sm">
+                                        <span className="font-medium mr-2">Role:</span>
+                                        <span>{project.role}</span>
+                                    </div>
                                 </div>
 
                                 <div className="flex space-x-3 pt-2">
@@ -128,17 +166,18 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                             rel="noopener noreferrer"
                                             className="flex items-center px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
                                         >
-                                            <Link size={16} className="mr-1"/>
+                                            <Link size={16} className="mr-1" />
                                             <span>Live Demo</span>
                                         </a>
                                     )}
                                 </div>
                             </div>
-
+                            
+                           
                             {project.codeSnippets.length > 0 && (
-                                <div className="border-b border-border">
+                                <div className="border-b border-border pb-6">
                                     <div className="flex justify-between items-center mb-4">
-                                    <h4 className="text-xl font-semibold">Code Snippets</h4>
+                                        <h4 className="text-xl font-semibold">Code Snippets</h4>
                                         <Button
                                             variant="outline"
                                             size="sm"
@@ -182,7 +221,27 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                 </div>
                             )}
                         </div>
+                        
+                        {project.additionalText && (
+                            <div className="p-6 border-b border-border overflow-y-auto">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h4 className="text-xl font-semibold">Additional Information</h4>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => setShowAdditionalText(!showAdditionalText)}
+                                    >
+                                        {showAdditionalText ? "Show Less" : "Show More"}
+                                    </Button>
+                                </div>
 
+                                {showAdditionalText && (
+                                    <div className="mt-4 text-muted-foreground animate-fade-in">
+                                        {project.additionalText}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         <div className="mt-8 flex justify-end space-x-4">
                             {project.githubUrl && (
                                 <Button variant="outline" asChild>

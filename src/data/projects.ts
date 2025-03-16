@@ -27,6 +27,7 @@ export const projects: Project[] = [
         platform: "PC & Console",
         duration: "6 months",
         teamSize: "5 people",
+        additionalText: "blablabl",
         codeSnippets: [
             {
                 title: "Planet Rotation",
@@ -91,6 +92,7 @@ public class GravityAttractor : MonoBehaviour
         platform: "Oculus, SteamVR",
         duration: "8 months",
         teamSize: "3 people",
+        additionalText: "blablabl",
         codeSnippets: [
             {
                 title: "Planet Generation",
