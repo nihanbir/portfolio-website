@@ -24,14 +24,24 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
     const handleToggle = () => {
         onToggleExpand();
     };
+    
+    const [activeTab, setActiveTab] = useState(
+        project.codeSnippets.length > 0
+            ? project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()
+            : ""
+    );
 
     useEffect(() => {
         if (contentRef.current && isExpanded) {
-            setHeight(contentRef.current.scrollHeight);
+            // Use setTimeout to allow the DOM to update first
+            const timer = setTimeout(() => {
+                setHeight(contentRef.current.scrollHeight);
+            }, 0);
+            return () => clearTimeout(timer);
         } else {
             setHeight(null);
         }
-    }, [isExpanded, project, showCodeSnippets, showAdditionalText]);
+    }, [isExpanded, project, showCodeSnippets, showAdditionalText, activeTab]);
 
     // Function to handle image errors
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -191,7 +201,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
                                     {showCodeSnippets && (
                                         <div className="mt-4 animate-fade-in">
-                                            <Tabs defaultValue={project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()}>
+                                            <Tabs defaultValue={project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()}
+                                                onValueChange={setActiveTab}
+                                            >
                                                 <TabsList className="mb-2">
                                                     {project.codeSnippets.map((snippet) => (
                                                         <TabsTrigger
@@ -236,7 +248,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                 </div>
 
                                 {showAdditionalText && (
-                                    <pre className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
+                                    <pre className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md"
+                                         rel="noopener noreferrer"
+                                    >
                                         {project.additionalText}
                                     </pre>
                                 )}

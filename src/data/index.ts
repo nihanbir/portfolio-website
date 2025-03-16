@@ -18,7 +18,7 @@ export interface Project {
                 language: string;
                 code: string;
         }[];
-        additionalText: string;
+        additionalText?: string;
         githubUrl?: string;
         playUrl?: string;
 }

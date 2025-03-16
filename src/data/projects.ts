@@ -121,8 +121,6 @@ public class PlanetGenerator : MonoBehaviour
 }`
             }
         ],
-        githubUrl: "https://github.com/space-explorer",
-        playUrl: "https://store.steampowered.com/space-explorer"
     }
 ];
 
