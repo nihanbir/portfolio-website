@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Project } from '@/data/index.ts';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, Monitor } from 'lucide-react';
@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Monitor } from 'lucide-react';
 interface ProjectNavigationProps {
     projects: Project[];
     expandedProjects: string[];
+    activeProject: string | null;
     onProjectSelect: (projectId: string) => void;
     className?: string;
 }
@@ -13,6 +14,7 @@ interface ProjectNavigationProps {
 export function ProjectNavigation({
                                       projects,
                                       expandedProjects,
+                                      activeProject,
                                       onProjectSelect,
                                       className
                                   }: ProjectNavigationProps) {
