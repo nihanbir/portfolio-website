@@ -35,12 +35,12 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         <div
             id={`project-${project.id}`}
             className={cn(
-                "project-card",
+                "project-card project-card backdrop-blur-md bg-background/60 border border-primary/70 shadow-lg rounded-xl overflow-hidden mb-6 transition-all duration-300",
                 isExpanded && "expanded"
             )}
         >
             <div className="p-4 sm:p-6">
-                <div className="p-6 border-b border-border">
+                <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
                         <h2 className="text-2xl font-bold text-primary">{project.title}</h2>
                         <button
