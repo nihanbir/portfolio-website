@@ -41,7 +41,7 @@ export function ProjectNavigation({
         setTimeout(() => {
             const element = document.getElementById(`project-${projectId}`);
             if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                element.scrollIntoView({  behavior: 'smooth', block: 'start', inline: 'nearest'});
             }
         }, 100);
     };
@@ -52,7 +52,7 @@ export function ProjectNavigation({
             isCollapsed ? "w-12" : "w-56",
             className
         )}>
-            <div className="sticky top-20 flex flex-col h-[calc(100vh-5rem)] overflow-y-auto">
+            <div className="sticky top-20 flex flex-col overflow-y-auto">
                 <div className="flex items-center justify-between p-3 border-b border-sidebar-border">
                     <h3 className={cn(
                         "font-bold transition-opacity duration-300",
@@ -69,12 +69,12 @@ export function ProjectNavigation({
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto py-2">
+                <div className="flex-1 overflow-y-auto py-2 ">
                     {projects.map((project) => (
                         <button
                             key={project.id}
                             className={cn(
-                                "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors",
+                                "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
                                 expandedProjects.includes(project.id) ? "bg-primary/20 text-primary" : "hover:bg-sidebar-accent",
                                 isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start"
                             )}
