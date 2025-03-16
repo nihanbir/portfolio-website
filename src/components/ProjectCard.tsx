@@ -31,7 +31,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         } else {
             setHeight(null);
         }
-    }, [isExpanded, project, showCodeSnippets]);
+    }, [isExpanded, project, showCodeSnippets, showAdditionalText]);
 
     // Function to handle image errors
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -236,9 +236,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                 </div>
 
                                 {showAdditionalText && (
-                                    <div className="mt-4 text-muted-foreground animate-fade-in">
+                                    <pre className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
                                         {project.additionalText}
-                                    </div>
+                                    </pre>
                                 )}
                             </div>
                         )}
