@@ -93,34 +93,6 @@ public class GravityAttractor : MonoBehaviour
         duration: "8 months",
         teamSize: "3 people",
         additionalText: "blablabl",
-        codeSnippets: [
-            {
-                title: "Planet Generation",
-                language: "csharp",
-                code: `using UnityEngine;
-
-public class PlanetGenerator : MonoBehaviour
-{
-    public int resolution = 50;
-    public float radius = 10f;
-    
-    void Start()
-    {
-        GeneratePlanet();
-    }
-    
-    private void GeneratePlanet()
-    {
-        // Create mesh
-        Mesh mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-        
-        // Generate vertices and triangles based on resolution
-        // Code for sphere mesh generation...
-    }
-}`
-            }
-        ],
     }
 ];
 

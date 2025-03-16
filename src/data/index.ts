@@ -13,7 +13,7 @@ export interface Project {
         platform?: string;
         duration?: string;
         teamSize?: string;
-        codeSnippets: {
+        codeSnippets?: {
                 title: string;
                 language: string;
                 code: string;

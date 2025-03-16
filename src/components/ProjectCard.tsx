@@ -19,14 +19,14 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
     const [showCodeSnippets, setShowCodeSnippets] = useState(false);
     const [showAdditionalText, setShowAdditionalText] = useState(false);
-    
+
 
     const handleToggle = () => {
         onToggleExpand();
     };
-    
+
     const [activeTab, setActiveTab] = useState(
-        project.codeSnippets.length > 0
+        project.codeSnippets && project.codeSnippets.length > 0
             ? project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()
             : ""
     );
@@ -182,9 +182,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                     )}
                                 </div>
                             </div>
-                            
-                           
-                            {project.codeSnippets.length > 0 && (
+
+
+                            {project.codeSnippets && project.codeSnippets.length > 0 && (
                                 <div className="border-b border-border pb-6">
                                     <div className="flex justify-between items-center mb-4">
                                         <h4 className="text-xl font-semibold">Code Snippets</h4>
@@ -199,10 +199,10 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                         </Button>
                                     </div>
 
-                                    {showCodeSnippets && (
+                                    {showCodeSnippets && project.codeSnippets && project.codeSnippets.length > 0 && (
                                         <div className="mt-4 animate-fade-in">
                                             <Tabs defaultValue={project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()}
-                                                onValueChange={setActiveTab}
+                                                  onValueChange={setActiveTab}
                                             >
                                                 <TabsList className="mb-2">
                                                     {project.codeSnippets.map((snippet) => (
@@ -233,7 +233,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                 </div>
                             )}
                         </div>
-                        
+
                         {project.additionalText && (
                             <div className="p-6 border-b border-border overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
