@@ -37,6 +37,11 @@ export function ImageGallery({ images, mainImage }: ImageGalleryProps) {
     setModalImage(allImages[prevIndex]);
   };
 
+  // Function to handle image errors
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/api/placeholder/400/300';
+  };
+
   return (
       <div className="space-y-3">
         <div
@@ -47,6 +52,7 @@ export function ImageGallery({ images, mainImage }: ImageGalleryProps) {
               src={currentImage}
               alt="Project screenshot"
               className="w-full h-full object-cover object-center transition-transform hover:scale-105 duration-300"
+              onError={handleImageError}
           />
         </div>
 
@@ -64,6 +70,7 @@ export function ImageGallery({ images, mainImage }: ImageGalleryProps) {
                     src={image}
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
+                    onError={handleImageError}
                 />
               </div>
           ))}
@@ -91,6 +98,7 @@ export function ImageGallery({ images, mainImage }: ImageGalleryProps) {
                   src={modalImage}
                   alt="Project screenshot fullscreen"
                   className="max-w-[90%] max-h-[90%] object-contain"
+                  onError={handleImageError}
               />
 
               <button
