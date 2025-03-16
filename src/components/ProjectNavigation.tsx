@@ -5,14 +5,14 @@ import { ChevronLeft, ChevronRight, Monitor } from 'lucide-react';
 
 interface ProjectNavigationProps {
     projects: Project[];
-    expandedProject: string | null;
+    expandedProjects: string[];
     onProjectSelect: (projectId: string) => void;
     className?: string;
 }
 
 export function ProjectNavigation({
                                       projects,
-                                      expandedProject,
+                                      expandedProjects,
                                       onProjectSelect,
                                       className
                                   }: ProjectNavigationProps) {
@@ -73,7 +73,7 @@ export function ProjectNavigation({
                             key={project.id}
                             className={cn(
                                 "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors",
-                                expandedProject === project.id && "active bg-sidebar-accent bg-opacity-30",
+                                expandedProjects.includes(project.id) ? "bg-primary/20 text-primary" : "hover:bg-sidebar-accent",
                                 isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start"
                             )}
                             onClick={() => scrollToProject(project.id)}

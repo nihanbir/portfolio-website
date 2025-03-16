@@ -10,7 +10,19 @@ import Footer from '@/components/Footer';
 import About from "@/components/About.tsx";
 
 const Index = () => {
-    const [expandedProject, setExpandedProject] = useState<string | null>(null);
+    const [expandedProjects, setExpandedProjects] = useState<string[]>(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                const saved = localStorage.getItem('expandedProjects');
+                return saved ? JSON.parse(saved) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+        return [];
+    });
+    
+    const [activeProject, setActiveProject] = useState<string | null>(null);
     const [selectedTechs, setSelectedTechs] = useState<string[]>([]);
     const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
 
@@ -28,14 +40,31 @@ const Index = () => {
             setFilteredProjects(filtered);
 
             // If the currently expanded project is no longer in the filtered list, collapse it
-            if (expandedProject && !filtered.some(p => p.id === expandedProject)) {
-                setExpandedProject(null);
-            }
+            setExpandedProjects(prev => prev.filter(id => filtered.some(p => p.id === id)));
         }
-    }, [selectedTechs, expandedProject]);
+    }, [selectedTechs]);
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('expandedProjects', JSON.stringify(expandedProjects));
+        }
+    }, [expandedProjects]);
     const handleToggleExpand = (projectId: string) => {
-        setExpandedProject(expandedProject === projectId ? null : projectId);
+        setExpandedProjects(prev => {
+            if (prev.includes(projectId)) {
+                return prev.filter(id => id !== projectId);
+            } else {
+                return [...prev, projectId];
+            }
+        });
+    };
+    const handleProjectSelect = (projectId: string) => {
+        setActiveProject(projectId);
+
+        // If the project isn't expanded yet, expand it
+        if (!expandedProjects.includes(projectId)) {
+            handleToggleExpand(projectId);
+        }
     };
 
     const handleFilterChange = (selected: string[]) => {
@@ -45,7 +74,7 @@ const Index = () => {
     return (
         <div className="min-h-screen bg-background">
             <Header/>
-            <main className="pt-24">
+            <main className="container mx-auto pb-20 pl-56">
                 <About/>
                 <section id="projects" className="py-12">
                     <div className="flex justify-between flex-col md:flex-row">
@@ -59,9 +88,10 @@ const Index = () => {
 
                         <ProjectNavigation
                             projects={filteredProjects}
-                            expandedProject={expandedProject}
-                            onProjectSelect={(projectId) => setExpandedProject(projectId)}
-                            className="hidden md:block"
+                            expandedProjects={expandedProjects}
+                            activeProject={activeProject}
+                            onProjectSelect={handleProjectSelect}
+                            className="md:block hidden"
                         />
 
                         <div className="flex-1 px-4 md:px-8">
@@ -79,7 +109,7 @@ const Index = () => {
                                         <ProjectCard
                                             key={project.id}
                                             project={project}
-                                            isExpanded={expandedProject === project.id}
+                                            isExpanded={expandedProjects.includes(project.id)}
                                             onToggleExpand={() => handleToggleExpand(project.id)}
                                         />
                                     ))
