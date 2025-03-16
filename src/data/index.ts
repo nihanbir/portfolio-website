@@ -15,10 +15,9 @@ export interface Project {
         teamSize?: string;
         codeSnippets: {
                 title: string;
-                code: string;
                 language: string;
+                code: string;
         }[];
-        additionalText?: string;
         githubUrl?: string;
         playUrl?: string;
 }

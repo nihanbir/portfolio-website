@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react';
-import Header from '@/components/Header.tsx';
+import React, { useState, useEffect } from 'react';
+import Header from '@/components/Header';
 import { ProjectCard } from '@/components/ProjectCard';
 import { ProjectNavigation } from '@/components/ProjectNavigation';
-import { ProjectFilter } from '@/components/ProjectFilter.tsx';
-import { projects } from '@/data/projects';
-import { Project } from '@/data/index.ts';
+import { ProjectFilter } from '@/components/ProjectFilter';
+import { projects, getAllTechnologies } from '@/data/projects';
+import { Project } from '@/data';
 import { ChevronRight, ChevronLeft, Download, Mail, Linkedin } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 const Index = () => {
     const [expandedProject, setExpandedProject] = useState<string | null>(null);
     const [selectedTechs, setSelectedTechs] = useState<string[]>([]);
     const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
+
+    // Get all unique technologies
+    const allTechnologies = getAllTechnologies();
 
     useEffect(() => {
         if (selectedTechs.length === 0) {
@@ -18,7 +22,7 @@ const Index = () => {
         } else {
             const filtered = projects.filter((project) => {
                 // Check if project has at least one of the selected technologies
-                return project.technologies.some((tech) => selectedTechs.includes(tech.id));
+                return project.technologies.some((tech) => selectedTechs.includes(tech));
             });
             setFilteredProjects(filtered);
 
@@ -74,8 +78,8 @@ const Index = () => {
                 <section id="projects" className="py-12">
                     <div className="flex justify-between flex-col md:flex-row">
                         <div className="md:hidden mb-6 px-4">
-                            <TechFilter
-                                technologies={technologies}
+                            <ProjectFilter
+                                technologies={allTechnologies}
                                 selectedTechs={selectedTechs}
                                 onFilterChange={handleFilterChange}
                             />
@@ -90,8 +94,8 @@ const Index = () => {
 
                         <div className="flex-1 px-4 md:px-8">
                             <div className="mb-8 hidden md:block">
-                                <TechFilter
-                                    technologies={technologies}
+                                <ProjectFilter
+                                    technologies={allTechnologies}
                                     selectedTechs={selectedTechs}
                                     onFilterChange={handleFilterChange}
                                 />
@@ -134,14 +138,14 @@ const Index = () => {
                         </p>
                         <div className="inline-flex items-center justify-center space-x-4">
                             <a
-                                href="mailto:contact@example.com"
+                                href="mailto:nihan.bir@gmail.com"
                                 className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
                             >
                                 <Mail className="mr-2 h-5 w-5" />
                                 Email Me
                             </a>
                             <a
-                                href="https://linkedin.com/"
+                                href="https://linkedin.com/in/nihanbir/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center px-6 py-3 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/90 transition-colors"
@@ -153,6 +157,8 @@ const Index = () => {
                     </div>
                 </section>
             </main>
+
+            <Footer />
         </div>
     );
 };
