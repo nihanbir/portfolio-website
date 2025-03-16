@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ImageGallery } from './ImageGallery';
 
 interface ImageGalleryProps {
   images: string[];

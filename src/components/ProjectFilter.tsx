@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 interface ProjectFilterProps {
     technologies: string[];
     selectedTechs: string[];
-    toggleTech: (tech: string) => void;
+    onFilterChange: (selected: string[]) => void;
 }
 
 export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: ProjectFilterProps) {
@@ -15,12 +15,12 @@ export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: P
         setLocalSelectedTechs(selectedTechs);
     }, [selectedTechs]);
 
-    const toggleTech = (techId: string) => {
+    const toggleTech = (tech: string) => {
         let newSelected;
-        if (localSelectedTechs.includes(techId)) {
-            newSelected = localSelectedTechs.filter(id => id !== techId);
+        if (localSelectedTechs.includes(tech)) {
+            newSelected = localSelectedTechs.filter(id => id !== tech);
         } else {
-            newSelected = [...localSelectedTechs, techId];
+            newSelected = [...localSelectedTechs, tech];
         }
         setLocalSelectedTechs(newSelected);
         onFilterChange(newSelected);
@@ -30,23 +30,32 @@ export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: P
         setLocalSelectedTechs([]);
         onFilterChange([]);
     };
-    
+
     return (
         <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">Filter by Technologies</h3>
-          <div className="flex flex-wrap gap-2">
-            {technologies.map((tech) => (
-              <button
-                key={tech}
-                onClick={() => toggleTech(tech)}
-                className={`tech-tag ${
-                  selectedTechs.includes(tech) ? "tech-tag-active" : "tech-tag-inactive"
-                }`}
-              >
-                {tech}
-              </button>
-            ))}
-          </div>
+            <h3 className="text-xl font-semibold mb-4">Filter by Technologies</h3>
+            <div className="flex flex-wrap gap-2">
+                {technologies.map((tech) => (
+                    <button
+                        key={tech}
+                        onClick={() => toggleTech(tech)}
+                        className={cn(
+                            "tech-tag",
+                            selectedTechs.includes(tech) ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                        )}
+                    >
+                        {tech}
+                    </button>
+                ))}
+                {selectedTechs.length > 0 && (
+                    <button
+                        onClick={clearFilters}
+                        className="tech-tag bg-destructive/10 text-destructive hover:bg-destructive/20"
+                    >
+                        Clear All
+                    </button>
+                )}
+            </div>
         </div>
     );
 }
