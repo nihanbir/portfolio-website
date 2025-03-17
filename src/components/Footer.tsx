@@ -1,6 +1,7 @@
 
 import React from "react";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -21,7 +22,7 @@ const Footer = () => {
               className="text-muted-foreground hover:text-primary transition-colors"
               aria-label="GitHub"
             >
-              <Github size={20} />
+              <FaGithub size={20} />
             </a>
             <a 
               href="https://www.linkedin.com/in/nihanbir/" 
@@ -30,7 +31,7 @@ const Footer = () => {
               className="text-muted-foreground hover:text-primary transition-colors"
               aria-label="LinkedIn"
             >
-              <Linkedin size={20} />
+              <FaLinkedin size={20} />
             </a>
             <a 
               href="mailto:nihan.bir@gmail.com" 
