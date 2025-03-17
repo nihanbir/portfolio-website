@@ -142,27 +142,31 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             <div className="space-y-4">
                                 <h3 className="text-xl font-semibold">Project Details</h3>
                                 <div className="space-y-2">
+                                    {project.role && (
+                                        <div className="flex items-center text-sm">
+                                            <span className="font-medium mr-2">Role:</span>
+                                            <ul className="list-disc pl-5 space-y-1 text-card-foreground/80">
+                                                {project.role.map((point, index) => (
+                                                    <li key={index}>{point}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    {project.platform && (
+                                        <div className="flex items-center text-sm">
+                                            <Monitor size={16} className="mr-2 text-primary"/>
+                                            <span className="font-medium mr-2">Platform:</span>
+                                            <span>{project.platform}</span>
+                                        </div>
+                                    )}
 
-                                    <div className="flex items-center text-sm">
-                                        <span className="font-medium mr-2">Role:</span>
-                                        <ul className="list-disc pl-5 space-y-1 text-card-foreground/80">
-                                            {project.role.map((point, index) => (
-                                                <li key={index}>{point}</li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    <div className="flex items-center text-sm">
-                                        <Monitor size={16} className="mr-2 text-primary"/>
-                                        <span className="font-medium mr-2">Platform:</span>
-                                        <span>{project.platform || 'Not specified'}</span>
-                                    </div>
-
-                                    <div className="flex items-center text-sm">
-                                        <Calendar size={16} className="mr-2 text-primary"/>
-                                        <span className="font-medium mr-2">Duration:</span>
-                                        <span>{project.duration}</span>
-                                    </div>
+                                    {project.duration && (
+                                        <div className="flex items-center text-sm">
+                                            <Calendar size={16} className="mr-2 text-primary"/>
+                                            <span className="font-medium mr-2">Duration:</span>
+                                            <span>{project.duration}</span>
+                                        </div>
+                                    )}
 
                                     {project.teamSize && (
                                         <div className="flex items-center text-sm">
