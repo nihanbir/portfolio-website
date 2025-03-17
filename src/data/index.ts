@@ -4,7 +4,7 @@ export interface Project {
         technologies: string[];
         shortDescription: string;
         fullDescription: string;
-        role: string;
+        role: string[];
         images: {
                 main: string;
                 gallery: string[];

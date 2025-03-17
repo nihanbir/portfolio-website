@@ -5,9 +5,10 @@ export const projects: Project[] = [
     {
         id: "1",
         title: "Way Of Hoof",
-        technologies: ["Unity", "C#"],
+        technologies: ["Unreal Engine 5", "C++", "GAS"],
         shortDescription: "Side scrolling beat 'em up game Vertical Slice Development at Ballistic Pork, As the scrum master and primary programmer.",
-        role: "Scrum Master & Gameplay Programmer",
+        role: ["Scrum Master " ,
+            "Gameplay Programmer"],
         fullDescription:
             "Side scrolling beat 'em up game Vertical Slice Development at Ballistic Pork. As the scrum master and primary programmer, " +
             "I coordinated the development of the vertical slice, working closely with artists, designers, and management to ensure the " +
@@ -74,7 +75,8 @@ public class GravityAttractor : MonoBehaviour
         title: "Space Explorer VR",
         technologies: ["Unity", "C#", "VR"],
         shortDescription: "Virtual reality space exploration game with realistic physics and planetary environments.",
-        role: "Lead Programmer",
+        role: ["Scrum Master " ,
+            "Gameplay Programmer"],
         fullDescription:
             "Space Explorer VR is an immersive virtual reality experience that lets players explore a procedurally generated universe. " +
             "As the lead programmer, I developed the procedural planet generation system, implemented realistic space physics, " +
