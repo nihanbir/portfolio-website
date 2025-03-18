@@ -486,7 +486,201 @@ int main(int argc, char* args[])
                 'https://private-user-images.githubusercontent.com/112477158/423991303-de878f8a-9cbd-4094-8d20-97d0507318ff.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDIzMDM1OTksIm5iZiI6MTc0MjMwMzI5OSwicGF0aCI6Ii8xMTI0NzcxNTgvNDIzOTkxMzAzLWRlODc4ZjhhLTljYmQtNDA5NC04ZDIwLTk3ZDA1MDczMThmZi5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMzE4JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDMxOFQxMzA4MTlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mMWVkYTkwZGNhYmYzOGYxZTkxNGM4OGM2ODYxY2QwZTk5ZjI0YTYxZmI5YmJjODFlMGEyMmYzZmUyYjM4MmFkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.PRfr13J1RH8IS_FqlE2xClOHMpUSvOtNNKtaPdKef5M',
             ],
         },
-        githubUrl: "https://github.com/nihanbir/Mirror-sk8escape"
+        githubUrl: "https://github.com/nihanbir/Mirror-sk8escape",
+        codeSnippets:[
+            {
+                title: "LoadManager.cs",
+                language: "csharp",
+                code: `using System;
+using System.Collections;
+using System.IO;
+using Firebase.Auth;
+using Firebase.Database;
+using TMPro;
+using UnityEngine;
+
+namespace Backend.Scripts
+{
+    public class LoadManager : MonoBehaviour
+    {
+        private long onlineTimeStamp;
+        private long localTimeStamp;
+        private GameData onlineData;
+        private SaveManager _saveManager;
+
+        public GameObject startButton;
+        public GameObject loadingText;
+        public TextMeshProUGUI signinFailed;
+        
+        private bool OnlineDataMissing => onlineTimeStamp == 0;
+        private bool LocalDataMissing => localTimeStamp == 0;
+        private void Awake()
+        {
+            EnablePressToPlay(false);
+            Invoke("HandleFailedSignin", 5);
+            FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
+            if (Application.internetReachability != NetworkReachability.NotReachable)
+            {
+                StartCoroutine(GetStats());
+            }
+            else
+            {
+                CancelInvoke("HandleFailedSignin");
+                HandleFailedSignin();
+            }
+        }
+
+        private void LoadData()
+        {
+            var path = Application.persistentDataPath + "/stats.save.json";
+            GameData localData = null;
+        
+            if (File.Exists(path))
+            {
+                string json = File.ReadAllText(path);
+                localData = JsonUtility.FromJson<GameData>(json);
+                localTimeStamp = localData.timeStamp;
+            }
+
+            if (LocalDataMissing && OnlineDataMissing)
+            {
+                EnablePressToPlay(true);
+                return;
+            }
+            //get the most up to date data stats
+            SetData(localTimeStamp > onlineTimeStamp ? localData : onlineData);
+        }
+
+        private void SetData(GameData data)
+        {
+            SaveManager.SaveTotalScore = data.totalScore;
+            SaveManager.SaveTotalGems = data.totalGems;
+            SaveManager.SaveTotalCoins = data.totalCoins;
+            SaveManager.SaveHighScore = data.playerHighScore;
+            EnablePressToPlay(true);
+        }
+
+        //upon finish loading
+        private void EnablePressToPlay(bool b)
+        {
+            loadingText.SetActive(!b);
+            startButton.SetActive(b);
+        }
+
+        //get online stats
+        public IEnumerator GetStats()
+        {
+            //give time to fetch
+            yield return new WaitForSeconds(1);
+            string username = String.Empty;
+#if UNITY_ANDROID
+            username = GooglePlayGames.PlayGamesPlatform.Instance.localUser.userName;
+#endif
+            if(username == String.Empty) username = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+            var userData = FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(username).GetValueAsync();
+            
+            yield return new WaitUntil(predicate: () => userData.IsCompleted);
+
+            DataSnapshot snapshot = userData.Result;
+            //if online data exists
+            if (snapshot != null && snapshot.Exists)
+            {
+                onlineData = JsonUtility.FromJson<GameData>(snapshot.GetRawJsonValue());
+                onlineTimeStamp = onlineData.timeStamp;
+            }
+            CancelInvoke("HandleFailedSignin");
+            LoadData();
+        }
+
+        void HandleFailedSignin()
+        {
+            signinFailed.text += "Failed to fetch online data.";
+            LoadData();
+            EnablePressToPlay(true);
+        }
+    }
+}`
+            },
+            {
+                title: "LoginPlaystore.cs",
+                language: "csharp",
+                code: `using System;
+using System.Threading.Tasks;
+using Firebase.Auth;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using UnityEngine;
+
+namespace Backend.Scripts
+{
+    public class LoginPlayStore : MonoBehaviour
+    {
+        void Start()
+        {
+#if UNITY_ANDROID
+            
+            PlayGamesPlatform.DebugLogEnabled = true;
+            PlayGamesPlatform.Activate();
+            PlayGamesPlatform.Instance.Authenticate(ProcessAutomaticAuth);
+            if (!PlayGamesPlatform.Instance.IsAuthenticated() 
+                && FirebaseAuth.DefaultInstance.CurrentUser.UserId == String.Empty)
+            {
+                FirebaseAuth.DefaultInstance
+                    .SignInAnonymouslyAsync()
+                    .ContinueWith(ContinueWithLogin);
+            }
+#else
+                
+if (FirebaseAuth.DefaultInstance.CurrentUser.UserId == String.Empty){
+FirebaseAuth auth = FirebaseAuth.DefaultInstance;
+auth.SignInAnonymouslyAsync().ContinueWith(ContinueWithLogin);} 
+            
+#endif
+        }
+#if UNITY_ANDROID
+
+        private static void ProcessAutomaticAuth(SignInStatus status)
+        {
+            if (status != SignInStatus.Success)
+            {
+                PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessManualAuth);
+            }
+            else
+            {
+                ProcessManualAuth(status);
+            }
+        }
+
+        private static void ProcessManualAuth(SignInStatus status)
+        {
+            if (status != SignInStatus.Success) return;
+
+            PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
+            {
+                FirebaseAuth auth = FirebaseAuth.DefaultInstance;
+                Credential credential = PlayGamesAuthProvider.GetCredential(code);
+                auth.SignInWithCredentialAsync(credential).ContinueWith(ContinueWithLogin);
+            });
+        }
+#endif
+        private static void ContinueWithLogin(Task<FirebaseUser> task)
+        {
+                if (task.IsCanceled) Debug.Log("cancelled");
+                else if (task.IsFaulted)
+                {
+                    Debug.Log("error" + task.Exception);
+                }
+                else
+                {
+                    FirebaseUser newUser = task.Result;
+                } 
+        }
+        
+    }
+}`
+            },
+            
+        ]
     },
 ];
 
