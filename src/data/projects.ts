@@ -41,44 +41,6 @@ export const projects: Project[] = [
             gallery: [            ],
         },
         videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        codeSnippets: [
-            {
-                title: "Planet Rotation",
-                language: "csharp",
-                code: `using UnityEngine;
-
-public class PlanetRotation : MonoBehaviour
-{
-    public float rotationSpeed = 10f;
-
-    void Update()
-    {
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
-    }
-}`
-            },
-            {
-                title: "Gravity System",
-                language: "csharp",
-                code: `using UnityEngine;
-
-public class GravityAttractor : MonoBehaviour
-{
-    public float gravity = -10f;
-
-    public void Attract(Transform body)
-    {
-        Vector3 gravityUp = (body.position - transform.position).normalized;
-        Vector3 bodyUp = body.up;
-
-        body.GetComponent<Rigidbody>().AddForce(gravityUp * gravity);
-
-        Quaternion targetRotation = Quaternion.FromToRotation(bodyUp, gravityUp) * body.rotation;
-        body.rotation = Quaternion.Slerp(body.rotation, targetRotation, 50f * Time.deltaTime);
-    }
-}`
-            }
-        ],
     },
     {
         id: "2",
