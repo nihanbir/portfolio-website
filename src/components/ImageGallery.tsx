@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, Maximize, Minimize } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
 
@@ -21,6 +21,13 @@ export function ImageGallery({
   const [modalImage, setModalImage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalPortal, setModalPortal] = useState<HTMLElement | null>(null);
+
+  // Zoom state - Make sure these state changes actually affect the DOM
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [isPanning, setIsPanning] = useState(false);
+  const [panPosition, setPanPosition] = useState({ x: 0, y: 0 });
+  const [startPanPosition, setStartPanPosition] = useState({ x: 0, y: 0 });
+  const imageContainerRef = useRef<HTMLDivElement>(null);
 
   const allImages = [mainImage, ...images.filter(img => img !== mainImage)];
 
@@ -46,6 +53,9 @@ export function ImageGallery({
   const openModal = (image: string) => {
     setModalImage(image);
     setIsModalOpen(true);
+    // Reset zoom and pan state when opening modal
+    setZoomLevel(1);
+    setPanPosition({ x: 0, y: 0 });
     // Add a small delay before showing the modal content for a smoother animation
     setTimeout(() => setModalVisible(true), 50);
     document.body.style.overflow = 'hidden';
@@ -56,6 +66,8 @@ export function ImageGallery({
     // Wait for the fade-out animation to complete before closing the modal
     setTimeout(() => {
       setIsModalOpen(false);
+      setZoomLevel(1); // Reset zoom when closing
+      setPanPosition({ x: 0, y: 0 }); // Reset position when closing
       document.body.style.overflow = 'auto';
     }, 300);
   };
@@ -64,12 +76,14 @@ export function ImageGallery({
     const currentIndex = allImages.indexOf(modalImage);
     const nextIndex = (currentIndex + 1) % allImages.length;
     setModalImage(allImages[nextIndex]);
+    resetZoom();
   };
 
   const prevImage = () => {
     const currentIndex = allImages.indexOf(modalImage);
     const prevIndex = (currentIndex - 1 + allImages.length) % allImages.length;
     setModalImage(allImages[prevIndex]);
+    resetZoom();
   };
 
   // Get caption for current image
@@ -81,25 +95,102 @@ export function ImageGallery({
             : `${projectTitle} - View ${allImages.indexOf(image) + 1}`);
   };
 
+  // Zoom functionality with console logging for debugging
+  const zoomIn = () => {
+    setZoomLevel(prev => {
+      const newZoom = Math.min(prev + 0.5, 4);
+      console.log(`Zooming in to: ${newZoom}x`);
+      return newZoom;
+    });
+  };
+
+  const zoomOut = () => {
+    setZoomLevel(prev => {
+      const newZoom = Math.max(prev - 0.5, 1);
+      // Reset pan position if zooming back to 1
+      if (newZoom === 1) {
+        setPanPosition({ x: 0, y: 0 });
+      }
+      console.log(`Zooming out to: ${newZoom}x`);
+      return newZoom;
+    });
+  };
+
+  const resetZoom = () => {
+    console.log('Resetting zoom');
+    setZoomLevel(1);
+    setPanPosition({ x: 0, y: 0 });
+  };
+
+  // Pan functionality
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (zoomLevel > 1) {
+      e.preventDefault(); // Prevent default to avoid unwanted behaviors
+      setIsPanning(true);
+      setStartPanPosition({
+        x: e.clientX - panPosition.x,
+        y: e.clientY - panPosition.y
+      });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isPanning && zoomLevel > 1) {
+      const newX = e.clientX - startPanPosition.x;
+      const newY = e.clientY - startPanPosition.y;
+      setPanPosition({ x: newX, y: newY });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsPanning(false);
+  };
+
+  // Handle mouse wheel zoom
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+      zoomIn();
+    } else {
+      zoomOut();
+    }
+  };
+
   // Close modal on escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isModalOpen) {
-        closeModal();
-      } else if (e.key === 'ArrowRight' && isModalOpen) {
+        if (zoomLevel > 1) {
+          resetZoom();
+        } else {
+          closeModal();
+        }
+      } else if (e.key === 'ArrowRight' && isModalOpen && zoomLevel === 1) {
         nextImage();
-      } else if (e.key === 'ArrowLeft' && isModalOpen) {
+      } else if (e.key === 'ArrowLeft' && isModalOpen && zoomLevel === 1) {
         prevImage();
+      } else if (e.key === '+' && isModalOpen) {
+        zoomIn();
+      } else if (e.key === '-' && isModalOpen) {
+        zoomOut();
+      } else if (e.key === '0' && isModalOpen) {
+        resetZoom();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, modalImage]);
+  }, [isModalOpen, modalImage, zoomLevel]);
 
   // Function to handle image errors
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/api/placeholder/400/300';
+  };
+
+  // Click handler that properly prevents propagation
+  const handleZoomButtonClick = (e: React.MouseEvent, action: () => void) => {
+    e.stopPropagation();
+    action();
   };
 
   // Modal component to be rendered in the portal
@@ -112,7 +203,7 @@ export function ImageGallery({
                 "fixed inset-0 z-50 transition-all duration-300",
                 modalVisible ? "bg-black/90 opacity-100" : "bg-black/0 opacity-0"
             )}
-            onClick={closeModal}
+            onClick={zoomLevel > 1 ? undefined : closeModal}
         >
           <div
               className={cn(
@@ -122,28 +213,90 @@ export function ImageGallery({
               onClick={e => e.stopPropagation()}
           >
             <button
-                onClick={closeModal}
-                className="absolute top-4 right-4 text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200"
+                onClick={e => handleZoomButtonClick(e, closeModal)}
+                className="absolute top-4 right-4 text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200 z-10"
                 aria-label="Close modal"
             >
               <X size={28} />
             </button>
 
-            <button
-                onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-primary p-3 rounded-full bg-black/30 transition-colors duration-200 hover:bg-black/50"
-                aria-label="Previous image"
-            >
-              <ChevronLeft size={28} />
-            </button>
+            {/* Zoom controls */}
+            <div className="absolute top-4 left-4 flex space-x-2 z-10">
+              <button
+                  onClick={e => handleZoomButtonClick(e, zoomIn)}
+                  className="text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200"
+                  aria-label="Zoom in"
+                  disabled={zoomLevel >= 4}
+              >
+                <ZoomIn size={24} />
+              </button>
+              <button
+                  onClick={e => handleZoomButtonClick(e, zoomOut)}
+                  className="text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200"
+                  aria-label="Zoom out"
+                  disabled={zoomLevel <= 1}
+              >
+                <ZoomOut size={24} />
+              </button>
+              <button
+                  onClick={e => handleZoomButtonClick(e, resetZoom)}
+                  className="text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200"
+                  aria-label="Reset zoom"
+              >
+                {zoomLevel > 1 ? <Minimize size={24} /> : <Maximize size={24} />}
+              </button>
+            </div>
 
-            <div className="relative max-w-[90%] max-h-[90%] flex flex-col items-center">
-              <img
-                  src={modalImage}
-                  alt={getCaption(modalImage)}
-                  className="max-w-full max-h-[80vh] object-contain shadow-2xl"
-                  onError={handleImageError}
-              />
+            {/* Current zoom level indicator */}
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full z-10">
+              {Math.round(zoomLevel * 100)}%
+            </div>
+
+            {zoomLevel === 1 && (
+                <>
+                  <button
+                      onClick={e => handleZoomButtonClick(e, prevImage)}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-primary p-3 rounded-full bg-black/30 transition-colors duration-200 hover:bg-black/50 z-10"
+                      aria-label="Previous image"
+                  >
+                    <ChevronLeft size={28} />
+                  </button>
+
+                  <button
+                      onClick={e => handleZoomButtonClick(e, nextImage)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-primary p-3 rounded-full bg-black/30 transition-colors duration-200 hover:bg-black/50 z-10"
+                      aria-label="Next image"
+                  >
+                    <ChevronRight size={28} />
+                  </button>
+                </>
+            )}
+
+            <div
+                ref={imageContainerRef}
+                className="relative max-w-[90%] max-h-[90%] flex flex-col items-center overflow-hidden"
+                style={{
+                  cursor: zoomLevel > 1 ? (isPanning ? 'grabbing' : 'grab') : 'auto'
+                }}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onWheel={handleWheel}
+            >
+              <div className="relative overflow-hidden">
+                <img
+                    src={modalImage}
+                    alt={getCaption(modalImage)}
+                    className="max-w-full max-h-[80vh] object-contain shadow-2xl will-change-transform"
+                    onError={handleImageError}
+                    style={{
+                      transform: `scale(${zoomLevel}) translate(${panPosition.x / zoomLevel}px, ${panPosition.y / zoomLevel}px)`,
+                      transformOrigin: 'center',
+                      transition: isPanning ? 'none' : 'transform 0.2s ease-out',
+                    }}
+                />
+              </div>
               <div className="mt-4 text-white bg-black/50 px-4 py-2 rounded-md w-full max-w-3xl">
                 <p className="text-lg font-medium text-center">
                   {getCaption(modalImage)}
@@ -153,14 +306,6 @@ export function ImageGallery({
                 </p>
               </div>
             </div>
-
-            <button
-                onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-primary p-3 rounded-full bg-black/30 transition-colors duration-200 hover:bg-black/50"
-                aria-label="Next image"
-            >
-              <ChevronRight size={28} />
-            </button>
           </div>
         </div>
     );
