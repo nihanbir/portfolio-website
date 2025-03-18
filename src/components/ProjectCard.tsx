@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {ChevronDown, ChevronUp, Link, Calendar, Users, Monitor, Code, Play} from 'lucide-react';
+import { ChevronDown, ChevronUp, Link, Calendar, Users, Monitor, Code, Play } from 'lucide-react';
 import { FaGithub } from "react-icons/fa";
 import { cn } from '@/lib/utils';
-import {Button} from "@/components/ui/button.tsx";
-import {Tabs, TabsList, TabsContent, TabsTrigger} from "@/components/ui/tabs";
-import {ImageGallery} from "@/components/ImageGallery.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { ImageGallery } from "@/components/ImageGallery.tsx";
+import { MiniImageGallery } from "@/components/MiniImageGallery.tsx"; // Import the new component
 import { Project } from '@/data';
 
 export interface ProjectCardProps {
@@ -23,7 +24,6 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
     const [useExpandableSections, setUseExpandableSections] = useState(true);
 
-
     const handleToggle = () => {
         onToggleExpand();
     };
@@ -36,7 +36,6 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
     useEffect(() => {
         if (contentRef.current && isExpanded) {
-            // Use setTimeout to allow the DOM to update first
             const timer = setTimeout(() => {
                 setHeight(contentRef.current.scrollHeight);
             }, 0);
@@ -46,17 +45,12 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         }
     }, [isExpanded, project, showCodeSnippets, showAdditionalText, activeTab, expandedSections]);
 
-    // Function to handle image errors
-    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-        e.currentTarget.src = '/api/placeholder/400/300';
-    };
     const toggleSection = (sectionId: string) => {
         setExpandedSections(prev => ({
             ...prev,
             [sectionId]: !prev[sectionId]
         }));
     };
-        if (!project.fullDescription) return [];
 
     const parseDescriptionSections = () => {
         if (!project.fullDescription) return { introText: '', sections: [] };
@@ -70,15 +64,12 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         let parsingIntro = true;
 
         lines.forEach(line => {
-            // Check if the line looks like a title (ends with a colon or is in all caps)
             const isTitleLine = line.trim().endsWith(':') ||
                 (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
 
             if (isTitleLine) {
-                // If we were parsing intro, end intro collection
                 parsingIntro = false;
 
-                // If we have a previous section, save it
                 if (currentTitle && currentContent.length) {
                     sections.push({
                         title: currentTitle,
@@ -88,7 +79,6 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                 }
                 currentTitle = line.trim();
             } else if (line.trim() || (currentContent.length > 0 && line === '')) {
-                // If it's not a title and not empty, add to current content or intro
                 if (parsingIntro && sections.length === 0 && !currentTitle) {
                     introText += (introText ? '\n' : '') + line;
                 } else {
@@ -97,7 +87,6 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
             }
         });
 
-        // Add the last section if there is one
         if (currentTitle && currentContent.length) {
             sections.push({
                 title: currentTitle,
@@ -105,7 +94,6 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
             });
         }
 
-        // If no sections were found but there's content, create a default section
         if (sections.length === 0 && project.fullDescription.trim() && !introText) {
             return {
                 introText: '',
@@ -120,7 +108,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
     };
 
     const { introText, sections } = parseDescriptionSections();
-    
+
     return (
         <div
             id={`project-${project.id}`}
@@ -130,65 +118,38 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
             )}
         >
             <div className="p-4 sm:p-6">
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                     <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
                         <div className="flex flex-col space-y-2 flex-grow">
-                            <h2 className="text-2xl font-bold text-primary">{project.title}</h2>
+                            <h2 className="text-xl sm:text-2xl font-bold text-primary">{project.title}</h2>
                             <div className="flex flex-wrap gap-2">
                                 {project.technologies.map((tech) => (
-                                    <span key={tech} className="tech-tag">
-                                        {tech}
-                                    </span>
+                                    <span key={tech} className="tech-tag text-xs sm:text-sm">
+                    {tech}
+                  </span>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Mini Gallery for collapsed state */}
+                        {/* Mini Image Gallery */}
                         {!isExpanded && (
-                            <div className="flex-shrink-0 flex items-center gap-2">
-                                <div className="h-14 w-14 rounded-md overflow-hidden shadow-sm">
-                                    <img
-                                        src={project.images.main}
-                                        alt={`${project.title} main image`}
-                                        className="h-full w-full object-cover"
-                                        onError={handleImageError}
-                                    />
-                                </div>
-                                <div className="flex gap-2">
-                                    {project.images.gallery.slice(0, 2).map((image, index) => (
-                                        <div key={index} className="h-14 w-14 rounded-md overflow-hidden shadow-sm">
-                                            <img
-                                                src={image}
-                                                alt={`${project.title} preview ${index + 1}`}
-                                                className="h-full w-full object-cover"
-                                                onError={handleImageError}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                                <button
-                                    onClick={handleToggle}
-                                    className="p-2 rounded-full hover:bg-muted transition-colors flex-shrink-0"
-                                    aria-label={isExpanded ? "Collapse project" : "Expand project"}
-                                >
-                                    <ChevronDown className="text-primary" />
-                                </button>
-                            </div>
+                            <MiniImageGallery
+                                images={project.images.gallery}
+                                mainImage={project.images.main}
+                            />
                         )}
 
-                        {/* Just the toggle button for expanded state */}
-                        {isExpanded && (
-                            <button
-                                onClick={handleToggle}
-                                className="p-2 rounded-full hover:bg-muted transition-colors"
-                                aria-label="Collapse project"
-                            >
-                                <ChevronUp className="text-primary" />
-                            </button>
-                        )}
+                        {/* Toggle Button */}
+                        <button
+                            onClick={handleToggle}
+                            className="p-2 rounded-full hover:bg-muted transition-colors flex-shrink-0"
+                            aria-label={isExpanded ? "Collapse project" : "Expand project"}
+                        >
+                            {isExpanded ? <ChevronUp className="text-primary" /> : <ChevronDown className="text-primary" />}
+                        </button>
                     </div>
 
-                    <p className="mb-4 text-muted-foreground">{project.shortDescription}</p>
+                    <p className="mb-4 text-sm sm:text-base text-muted-foreground">{project.shortDescription}</p>
 
                     <div
                         ref={contentRef}
@@ -203,15 +164,16 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             <ImageGallery
                                 images={project.images.gallery}
                                 mainImage={project.images.main}
+                                projectTitle={project.title}
                             />
                         </div>
 
                         <div className="space-y-4 mt-6">
-                            <h3 className="text-xl font-semibold">About the Project</h3>
+                            <h3 className="text-lg sm:text-xl font-semibold">About the Project</h3>
 
                             {introText && (
                                 <div className="mb-4">
-                                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line">{introText}</p>
+                                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base">{introText}</p>
                                 </div>
                             )}
 
@@ -227,10 +189,10 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                                     onClick={() => toggleSection(sectionId)}
                                                     className="flex justify-between items-center w-full p-3 text-left bg-muted/50 hover:bg-muted transition-colors rounded-t-md"
                                                 >
-                                                    <span className="font-medium">{section.title}</span>
+                                                    <span className="font-medium text-sm sm:text-base">{section.title}</span>
                                                     {isExpanded ?
-                                                        <ChevronUp className="h-4 w-4 text-primary"/> :
-                                                        <ChevronDown className="h-4 w-4 text-primary"/>
+                                                        <ChevronUp className="h-4 w-4 text-primary" /> :
+                                                        <ChevronDown className="h-4 w-4 text-primary" />
                                                     }
                                                 </button>
                                                 <div
@@ -240,13 +202,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                                     )}
                                                 >
                                                     <div
-                                                        className="text-foreground/90 leading-relaxed whitespace-pre-line"
+                                                        className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base"
                                                         dangerouslySetInnerHTML={{
                                                             __html: section.content
-                                                                .replace(/\n {2}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;• ')  // Sub-bullet points (2 spaces)
-                                                                .replace(/\n {4}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ')  // Sub-sub-bullet points (4 spaces)
-                                                                .replace(/\n- /g, '<br>• ')  // Main bullet points
-                                                                .replace(/^\s*- /gm, '• ')  // Bullet points at start of content
+                                                                .replace(/\n {2}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;• ')
+                                                                .replace(/\n {4}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ')
+                                                                .replace(/\n- /g, '<br>• ')
+                                                                .replace(/^\s*- /gm, '• ')
                                                         }}
                                                     />
                                                 </div>
@@ -255,13 +217,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                     })}
                                 </div>
                             ) : (
-                                <p className="text-foreground/90 leading-relaxed">{project.fullDescription}</p>
+                                <p className="text-foreground/90 leading-relaxed text-sm sm:text-base">{project.fullDescription}</p>
                             )}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
                             <div className="space-y-4">
-                                <h3 className="text-xl font-semibold">Project Details</h3>
+                                <h3 className="text-lg sm:text-xl font-semibold">Project Details</h3>
                                 <div className="space-y-2">
                                     {project.role && (
                                         <div className="flex items-center text-sm">
@@ -275,7 +237,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                     )}
                                     {project.platform && (
                                         <div className="flex items-center text-sm">
-                                            <Monitor size={16} className="mr-2 text-primary"/>
+                                            <Monitor size={16} className="mr-2 text-primary" />
                                             <span className="font-medium mr-2">Platform:</span>
                                             <span>{project.platform}</span>
                                         </div>
@@ -283,7 +245,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
                                     {project.duration && (
                                         <div className="flex items-center text-sm">
-                                            <Calendar size={16} className="mr-2 text-primary"/>
+                                            <Calendar size={16} className="mr-2 text-primary" />
                                             <span className="font-medium mr-2">Duration:</span>
                                             <span>{project.duration}</span>
                                         </div>
@@ -291,13 +253,11 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
                                     {project.teamSize && (
                                         <div className="flex items-center text-sm">
-                                            <Users size={16} className="mr-2 text-primary"/>
+                                            <Users size={16} className="mr-2 text-primary" />
                                             <span className="font-medium mr-2">Team Size:</span>
                                             <span>{project.teamSize}</span>
                                         </div>
                                     )}
-
-
                                 </div>
 
                                 <div className="flex space-x-3 pt-2">
@@ -308,25 +268,24 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                             rel="noopener noreferrer"
                                             className="flex items-center px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
                                         >
-                                            <Link size={16} className="mr-1"/>
+                                            <Link size={16} className="mr-1" />
                                             <span>Live Demo</span>
                                         </a>
                                     )}
                                 </div>
                             </div>
 
-
                             {project.codeSnippets && project.codeSnippets.length > 0 && (
                                 <div className="border-b border-border pb-6">
                                     <div className="flex justify-between items-center mb-4">
-                                        <h4 className="text-xl font-semibold">Code Snippets</h4>
+                                        <h4 className="text-lg sm:text-xl font-semibold">Code Snippets</h4>
                                         <Button
                                             variant="outline"
                                             size="sm"
                                             onClick={() => setShowCodeSnippets(!showCodeSnippets)}
                                             className="flex items-center"
                                         >
-                                            <Code className="w-4 h-4 mr-2"/>
+                                            <Code className="w-4 h-4 mr-2" />
                                             {showCodeSnippets ? "Hide Code" : "Show Code"}
                                         </Button>
                                     </div>
@@ -342,6 +301,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                                         <TabsTrigger
                                                             key={snippet.title}
                                                             value={snippet.title.replace(/\s+/g, '-').toLowerCase()}
+                                                            className="text-xs sm:text-sm"
                                                         >
                                                             {snippet.title}
                                                         </TabsTrigger>
@@ -354,11 +314,11 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                                         value={snippet.title.replace(/\s+/g, '-').toLowerCase()}
                                                     >
                                                         <div className="relative">
-                                                            <pre
-                                                                className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
-                                                                <code
-                                                                    className="font-mono whitespace-pre">{snippet.code}</code>
-                                                            </pre>
+                              <pre
+                                  className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
+                                <code
+                                    className="font-mono whitespace-pre">{snippet.code}</code>
+                              </pre>
                                                         </div>
                                                     </TabsContent>
                                                 ))}
@@ -370,9 +330,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                         </div>
 
                         {project.additionalText && (
-                            <div className="p-6 border-b border-border overflow-y-auto">
+                            <div className="p-4 sm:p-6 border-b border-border overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
-                                    <h4 className="text-xl font-semibold">Additional Information</h4>
+                                    <h4 className="text-lg sm:text-xl font-semibold">Additional Information</h4>
                                     <Button
                                         variant="outline"
                                         size="sm"
@@ -386,16 +346,17 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                     <pre className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md"
                                          rel="noopener noreferrer"
                                     >
-                                        {project.additionalText}
-                                    </pre>
+                    {project.additionalText}
+                  </pre>
                                 )}
                             </div>
                         )}
+
                         <div className="mt-8 flex justify-end space-x-4">
                             {project.githubUrl && (
                                 <Button variant="outline" asChild>
                                     <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                                        <FaGithub className="w-4 h-4 mr-2"/>
+                                        <FaGithub className="w-4 h-4 mr-2" />
                                         GitHub Repository
                                     </a>
                                 </Button>
@@ -404,7 +365,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             {project.playUrl && (
                                 <Button asChild>
                                     <a href={project.playUrl} target="_blank" rel="noopener noreferrer">
-                                        <Play className="w-4 h-4 mr-2"/>
+                                        <Play className="w-4 h-4 mr-2" />
                                         Play Game
                                     </a>
                                 </Button>
