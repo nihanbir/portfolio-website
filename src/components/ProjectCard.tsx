@@ -5,9 +5,155 @@ import { cn } from '@/lib/utils';
 import { Button } from "@/components/ui/button.tsx";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { ImageGallery } from "@/components/ImageGallery.tsx";
-import { MiniImageGallery } from "@/components/MiniImageGallery.tsx"; // Import the new component
-import { Project } from '@/data';
+import { MiniImageGallery } from "@/components/MiniImageGallery.tsx";
+import { Project } from '@/data'; // Ensure this path is correct
 
+// CodeSnippets Component
+interface CodeSnippet {
+    title: string;
+    language: string;
+    code: string;
+}
+
+interface CodeSnippetsProps {
+    codeSnippets: CodeSnippet[];
+}
+
+function CodeSnippets({ codeSnippets }: CodeSnippetsProps) {
+    const [showCodeSnippets, setShowCodeSnippets] = useState(false);
+    const [activeTab, setActiveTab] = useState(codeSnippets[0]?.title.replace(/\s+/g, '-').toLowerCase() || '');
+
+    return (
+        <div className="border-b border-border pb-6">
+            <div className="flex justify-between items-center mb-4">
+                <h4 className="text-lg sm:text-xl font-semibold">Code Snippets</h4>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowCodeSnippets(!showCodeSnippets)}
+                    className="flex items-center"
+                >
+                    <Code className="w-4 h-4 mr-2" />
+                    {showCodeSnippets ? "Hide Code" : "Show Code"}
+                </Button>
+            </div>
+
+            {showCodeSnippets && codeSnippets.length > 0 && (
+                <div className="mt-4 animate-fade-in">
+                    <Tabs
+                        defaultValue={activeTab}
+                        onValueChange={setActiveTab}
+                    >
+                        <TabsList className="mb-2">
+                            {codeSnippets.map((snippet) => (
+                                <TabsTrigger
+                                    key={snippet.title}
+                                    value={snippet.title.replace(/\s+/g, '-').toLowerCase()}
+                                    className="text-xs sm:text-sm"
+                                >
+                                    {snippet.title}
+                                </TabsTrigger>
+                            ))}
+                        </TabsList>
+
+                        {codeSnippets.map((snippet) => (
+                            <TabsContent
+                                key={snippet.title}
+                                value={snippet.title.replace(/\s+/g, '-').toLowerCase()}
+                            >
+                                <div className="relative">
+                                    <pre className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
+                                        <code className="font-mono whitespace-pre">{snippet.code}</code>
+                                    </pre>
+                                </div>
+                            </TabsContent>
+                        ))}
+                    </Tabs>
+                </div>
+            )}
+        </div>
+    );
+}
+
+// FullDescription Component
+interface Section {
+    title: string;
+    content: string;
+}
+
+interface FullDescriptionProps {
+    introText: string;
+    sections: Section[];
+    projectId: string;
+}
+
+function FullDescription({ introText, sections, projectId }: FullDescriptionProps) {
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+
+    const toggleSection = (sectionId: string) => {
+        setExpandedSections(prev => ({
+            ...prev,
+            [sectionId]: !prev[sectionId]
+        }));
+    };
+
+    return (
+        <div className="space-y-4 mt-6">
+            <h3 className="text-lg sm:text-xl font-semibold">About the Project</h3>
+
+            {introText && (
+                <div className="mb-4">
+                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base">{introText}</p>
+                </div>
+            )}
+
+            {sections.length > 0 ? (
+                <div className="space-y-4">
+                    {sections.map((section, index) => {
+                        const sectionId = `section-${projectId}-${index}`;
+                        const isExpanded = expandedSections[sectionId] !== false;
+
+                        return (
+                            <div key={sectionId} className="border border-muted rounded-md">
+                                <button
+                                    onClick={() => toggleSection(sectionId)}
+                                    className="flex justify-between items-center w-full p-3 text-left bg-muted/50 hover:bg-muted transition-colors rounded-t-md"
+                                >
+                                    <span className="font-medium text-sm sm:text-base">{section.title}</span>
+                                    {isExpanded ?
+                                        <ChevronUp className="h-4 w-4 text-primary" /> :
+                                        <ChevronDown className="h-4 w-4 text-primary" />
+                                    }
+                                </button>
+                                <div
+                                    className={cn(
+                                        "p-3 transition-all duration-300",
+                                        !isExpanded && "hidden"
+                                    )}
+                                >
+                                    <div
+                                        className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base"
+                                        dangerouslySetInnerHTML={{
+                                            __html: section.content
+                                                .replace(/\n {2}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;• ')
+                                                .replace(/\n {4}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ')
+                                                .replace(/\n- /g, '<br>• ')
+                                                .replace(/^\s*- /gm, '• ')
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <p className="text-foreground/90 leading-relaxed text-sm sm:text-base">{introText}</p>
+            )}
+        </div>
+    );
+}
+
+// ProjectCard Component
 export interface ProjectCardProps {
     project: Project;
     key?: string;
@@ -18,21 +164,11 @@ export interface ProjectCardProps {
 export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCardProps) {
     const [height, setHeight] = useState<number | null>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-
-    const [showCodeSnippets, setShowCodeSnippets] = useState(false);
     const [showAdditionalText, setShowAdditionalText] = useState(false);
-    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
-    const [useExpandableSections, setUseExpandableSections] = useState(true);
 
     const handleToggle = () => {
         onToggleExpand();
     };
-
-    const [activeTab, setActiveTab] = useState(
-        project.codeSnippets && project.codeSnippets.length > 0
-            ? project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()
-            : ""
-    );
 
     useEffect(() => {
         if (contentRef.current && isExpanded) {
@@ -43,71 +179,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         } else {
             setHeight(null);
         }
-    }, [isExpanded, project, showCodeSnippets, showAdditionalText, activeTab, expandedSections]);
+    }, [isExpanded, project, showAdditionalText]);
 
-    const toggleSection = (sectionId: string) => {
-        setExpandedSections(prev => ({
-            ...prev,
-            [sectionId]: !prev[sectionId]
-        }));
-    };
-
-    const parseDescriptionSections = () => {
-        if (!project.fullDescription) return { introText: '', sections: [] };
-
-        const lines = project.fullDescription.split('\n');
-        let introText = '';
-        const sections: { title: string; content: string }[] = [];
-
-        let currentTitle = '';
-        let currentContent: string[] = [];
-        let parsingIntro = true;
-
-        lines.forEach(line => {
-            const isTitleLine = line.trim().endsWith(':') ||
-                (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
-
-            if (isTitleLine) {
-                parsingIntro = false;
-
-                if (currentTitle && currentContent.length) {
-                    sections.push({
-                        title: currentTitle,
-                        content: currentContent.join('\n')
-                    });
-                    currentContent = [];
-                }
-                currentTitle = line.trim();
-            } else if (line.trim() || (currentContent.length > 0 && line === '')) {
-                if (parsingIntro && sections.length === 0 && !currentTitle) {
-                    introText += (introText ? '\n' : '') + line;
-                } else {
-                    currentContent.push(line);
-                }
-            }
-        });
-
-        if (currentTitle && currentContent.length) {
-            sections.push({
-                title: currentTitle,
-                content: currentContent.join('\n')
-            });
-        }
-
-        if (sections.length === 0 && project.fullDescription.trim() && !introText) {
-            return {
-                introText: '',
-                sections: [{
-                    title: 'Overview',
-                    content: project.fullDescription
-                }]
-            };
-        }
-
-        return { introText, sections };
-    };
-
-    const { introText, sections } = parseDescriptionSections();
+    const { introText, sections } = parseDescriptionSections(project);
 
     return (
         <div
@@ -125,13 +199,12 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             <div className="flex flex-wrap gap-2">
                                 {project.technologies.map((tech) => (
                                     <span key={tech} className="tech-tag text-xs sm:text-sm">
-                    {tech}
-                  </span>
+                                        {tech}
+                                    </span>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Mini Image Gallery */}
                         {!isExpanded && (
                             <MiniImageGallery
                                 images={project.images.gallery}
@@ -139,7 +212,6 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             />
                         )}
 
-                        {/* Toggle Button */}
                         <button
                             onClick={handleToggle}
                             className="p-2 rounded-full hover:bg-muted transition-colors flex-shrink-0"
@@ -168,58 +240,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             />
                         </div>
 
-                        <div className="space-y-4 mt-6">
-                            <h3 className="text-lg sm:text-xl font-semibold">About the Project</h3>
-
-                            {introText && (
-                                <div className="mb-4">
-                                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base">{introText}</p>
-                                </div>
-                            )}
-
-                            {sections.length > 0 ? (
-                                <div className="space-y-4">
-                                    {sections.map((section, index) => {
-                                        const sectionId = `section-${project.id}-${index}`;
-                                        const isExpanded = expandedSections[sectionId] !== false;
-
-                                        return (
-                                            <div key={sectionId} className="border border-muted rounded-md">
-                                                <button
-                                                    onClick={() => toggleSection(sectionId)}
-                                                    className="flex justify-between items-center w-full p-3 text-left bg-muted/50 hover:bg-muted transition-colors rounded-t-md"
-                                                >
-                                                    <span className="font-medium text-sm sm:text-base">{section.title}</span>
-                                                    {isExpanded ?
-                                                        <ChevronUp className="h-4 w-4 text-primary" /> :
-                                                        <ChevronDown className="h-4 w-4 text-primary" />
-                                                    }
-                                                </button>
-                                                <div
-                                                    className={cn(
-                                                        "p-3 transition-all duration-300",
-                                                        !isExpanded && "hidden"
-                                                    )}
-                                                >
-                                                    <div
-                                                        className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base"
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: section.content
-                                                                .replace(/\n {2}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;• ')
-                                                                .replace(/\n {4}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ')
-                                                                .replace(/\n- /g, '<br>• ')
-                                                                .replace(/^\s*- /gm, '• ')
-                                                        }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            ) : (
-                                <p className="text-foreground/90 leading-relaxed text-sm sm:text-base">{project.fullDescription}</p>
-                            )}
-                        </div>
+                        <FullDescription introText={introText} sections={sections} projectId={project.id} />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
                             <div className="space-y-4">
@@ -276,56 +297,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             </div>
 
                             {project.codeSnippets && project.codeSnippets.length > 0 && (
-                                <div className="border-b border-border pb-6">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <h4 className="text-lg sm:text-xl font-semibold">Code Snippets</h4>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => setShowCodeSnippets(!showCodeSnippets)}
-                                            className="flex items-center"
-                                        >
-                                            <Code className="w-4 h-4 mr-2" />
-                                            {showCodeSnippets ? "Hide Code" : "Show Code"}
-                                        </Button>
-                                    </div>
-
-                                    {showCodeSnippets && project.codeSnippets && project.codeSnippets.length > 0 && (
-                                        <div className="mt-4 animate-fade-in">
-                                            <Tabs
-                                                defaultValue={project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()}
-                                                onValueChange={setActiveTab}
-                                            >
-                                                <TabsList className="mb-2">
-                                                    {project.codeSnippets.map((snippet) => (
-                                                        <TabsTrigger
-                                                            key={snippet.title}
-                                                            value={snippet.title.replace(/\s+/g, '-').toLowerCase()}
-                                                            className="text-xs sm:text-sm"
-                                                        >
-                                                            {snippet.title}
-                                                        </TabsTrigger>
-                                                    ))}
-                                                </TabsList>
-
-                                                {project.codeSnippets.map((snippet) => (
-                                                    <TabsContent
-                                                        key={snippet.title}
-                                                        value={snippet.title.replace(/\s+/g, '-').toLowerCase()}
-                                                    >
-                                                        <div className="relative">
-                              <pre
-                                  className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
-                                <code
-                                    className="font-mono whitespace-pre">{snippet.code}</code>
-                              </pre>
-                                                        </div>
-                                                    </TabsContent>
-                                                ))}
-                                            </Tabs>
-                                        </div>
-                                    )}
-                                </div>
+                                <CodeSnippets codeSnippets={project.codeSnippets} />
                             )}
                         </div>
 
@@ -346,8 +318,8 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                     <pre className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md"
                                          rel="noopener noreferrer"
                                     >
-                    {project.additionalText}
-                  </pre>
+                                        {project.additionalText}
+                                    </pre>
                                 )}
                             </div>
                         )}
@@ -376,4 +348,60 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
             </div>
         </div>
     );
+}
+
+// Helper function to parse description sections
+function parseDescriptionSections(project: Project) {
+    if (!project.fullDescription) return { introText: '', sections: [] };
+
+    const lines = project.fullDescription.split('\n');
+    let introText = '';
+    const sections: { title: string; content: string }[] = [];
+
+    let currentTitle = '';
+    let currentContent: string[] = [];
+    let parsingIntro = true;
+
+    lines.forEach(line => {
+        const isTitleLine = line.trim().endsWith(':') ||
+            (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
+
+        if (isTitleLine) {
+            parsingIntro = false;
+
+            if (currentTitle && currentContent.length) {
+                sections.push({
+                    title: currentTitle,
+                    content: currentContent.join('\n')
+                });
+                currentContent = [];
+            }
+            currentTitle = line.trim();
+        } else if (line.trim() || (currentContent.length > 0 && line === '')) {
+            if (parsingIntro && sections.length === 0 && !currentTitle) {
+                introText += (introText ? '\n' : '') + line;
+            } else {
+                currentContent.push(line);
+            }
+        }
+    });
+
+    if (currentTitle && currentContent.length) {
+        sections.push({
+            title: currentTitle,
+            content: currentContent.join('\n')
+        });
+    }
+
+    if (sections.length === 0 && project.fullDescription.trim() && !introText) {
+        return {
+            introText: '',
+            sections: [{
+                title: 'Overview',
+                content: project.fullDescription
+            }]
+        };
+    }
+
+    return { introText, sections };
 }
