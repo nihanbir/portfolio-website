@@ -57,14 +57,16 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
     };
         if (!project.fullDescription) return [];
 
-        const parseDescriptionSections = () => {
-            if (!project.fullDescription) return [];
-            
-        const sections: { title: string; content: string }[] = [];
+    const parseDescriptionSections = () => {
+        if (!project.fullDescription) return { introText: '', sections: [] };
+
         const lines = project.fullDescription.split('\n');
+        let introText = '';
+        const sections: { title: string; content: string }[] = [];
 
         let currentTitle = '';
         let currentContent: string[] = [];
+        let parsingIntro = true;
 
         lines.forEach(line => {
             // Check if the line looks like a title (ends with a colon or is in all caps)
@@ -72,6 +74,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                 (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
 
             if (isTitleLine) {
+                // If we were parsing intro, end intro collection
+                parsingIntro = false;
+
                 // If we have a previous section, save it
                 if (currentTitle && currentContent.length) {
                     sections.push({
@@ -82,11 +87,19 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                 }
                 currentTitle = line.trim();
             } else if (line.trim()) {
-                // If it's not a title and not empty, add to current content
+                // If it's not a title and not empty, add to current content or intro
+                if (parsingIntro && sections.length === 0 && !currentTitle) {
+                    introText += (introText ? '\n' : '') + line;
+                } else {
+                    currentContent.push(line);
+                }
+            } else if (line === '' && currentContent.length > 0) {
+                // Preserve empty lines in content, but not at the beginning
                 currentContent.push(line);
             }
         });
-        
+
+        // Add the last section if there is one
         if (currentTitle && currentContent.length) {
             sections.push({
                 title: currentTitle,
@@ -95,16 +108,20 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         }
 
         // If no sections were found but there's content, create a default section
-        if (sections.length === 0 && project.fullDescription.trim()) {
-            return [{
-                title: 'Overview',
-                content: project.fullDescription
-            }];
+        if (sections.length === 0 && project.fullDescription.trim() && !introText) {
+            return {
+                introText: '',
+                sections: [{
+                    title: 'Overview',
+                    content: project.fullDescription
+                }]
+            };
         }
 
-        return sections;
+        return { introText, sections };
     };
-        const descriptionSections = parseDescriptionSections();
+
+    const { introText, sections } = parseDescriptionSections();
     
     return (
         <div
@@ -194,9 +211,15 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                         <div className="space-y-4 mt-6">
                             <h3 className="text-xl font-semibold">About the Project</h3>
 
-                            {descriptionSections.length > 0 ? (
+                            {introText && (
+                                <div className="mb-4">
+                                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line">{introText}</p>
+                                </div>
+                            )}
+
+                            {sections.length > 0 ? (
                                 <div className="space-y-4">
-                                    {descriptionSections.map((section, index) => {
+                                    {sections.map((section, index) => {
                                         const sectionId = `section-${project.id}-${index}`;
                                         const isExpanded = expandedSections[sectionId] !== false;
 
@@ -218,7 +241,14 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                                         !isExpanded && "hidden"
                                                     )}
                                                 >
-                                                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line">{section.content}</p>
+                                                    <div
+                                                        className="text-foreground/90 leading-relaxed whitespace-pre-line"
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: section.content
+                                                                .replace(/\n- /g, '<br>• ')
+                                                                .replace(/^\s*- /gm, '• ')
+                                                        }}
+                                                    />
                                                 </div>
                                             </div>
                                         );
