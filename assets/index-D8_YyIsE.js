@@ -184,33 +184,7 @@ Utilizing design patterns, where it's applicable:
  
 • The template method pattern in the player class to define a structure for character behavior, allowing for customization of specific actions within subclasses for a flexible and extensible player system.
  
-• The object pool pattern for the inventory system, optimizing resource management by reusing and recycling inventory items.`,images:{main:"https://impro.usercontent.one/appid/oneComWsb/domain/ballisticpork.se/media/ballisticpork.se/onewebmedia/banner_clovenblade_hamlet_01.png?etag=W%2F%22745ba-678b87d4%22&sourceContentType=image%2Fpng&ignoreAspectRatio&resize=1178%2B578",gallery:[]},videoUrl:"https://www.youtube.com/embed/dQw4w9WgXcQ",codeSnippets:[{title:"Planet Rotation",language:"csharp",code:`using UnityEngine;
-
-public class PlanetRotation : MonoBehaviour
-{
-    public float rotationSpeed = 10f;
-
-    void Update()
-    {
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
-    }
-}`},{title:"Gravity System",language:"csharp",code:`using UnityEngine;
-
-public class GravityAttractor : MonoBehaviour
-{
-    public float gravity = -10f;
-
-    public void Attract(Transform body)
-    {
-        Vector3 gravityUp = (body.position - transform.position).normalized;
-        Vector3 bodyUp = body.up;
-
-        body.GetComponent<Rigidbody>().AddForce(gravityUp * gravity);
-
-        Quaternion targetRotation = Quaternion.FromToRotation(bodyUp, gravityUp) * body.rotation;
-        body.rotation = Quaternion.Slerp(body.rotation, targetRotation, 50f * Time.deltaTime);
-    }
-}`}]},{id:"2",title:"Horpus",technologies:["Unreal Engine 5","Blueprints","Jira","Github","AI"],shortDescription:"This cute horror game is my first completed Unreal project. I worked on AI, environment and interactable items",role:["Gameplay Programmer"],fullDescription:`The complete game is about a person being trapped on the top floor of their 5 story apartment building with different monsters on each floor for them to dodge/escape from, by using traps, lures, sneaking techniques and equipment. This prototype has a house with a long corridor and a not so terrifying monster AI to show what the game could be like. The game was built with an expectation of expanding the game play in the future.
+• The object pool pattern for the inventory system, optimizing resource management by reusing and recycling inventory items.`,images:{main:"https://impro.usercontent.one/appid/oneComWsb/domain/ballisticpork.se/media/ballisticpork.se/onewebmedia/banner_clovenblade_hamlet_01.png?etag=W%2F%22745ba-678b87d4%22&sourceContentType=image%2Fpng&ignoreAspectRatio&resize=1178%2B578",gallery:[]},videoUrl:"https://www.youtube.com/embed/dQw4w9WgXcQ"},{id:"2",title:"Horpus",technologies:["Unreal Engine 5","Blueprints","Jira","Github","AI"],shortDescription:"This cute horror game is my first completed Unreal project. I worked on AI, environment and interactable items",role:["Gameplay Programmer"],fullDescription:`The complete game is about a person being trapped on the top floor of their 5 story apartment building with different monsters on each floor for them to dodge/escape from, by using traps, lures, sneaking techniques and equipment. This prototype has a house with a long corridor and a not so terrifying monster AI to show what the game could be like. The game was built with an expectation of expanding the game play in the future.
 My work: 
 - Cat AI in general but also these highlights;
   - The cat can open the doors;
@@ -440,7 +414,7 @@ int main(int argc, char* args[])
 • Melee attack system
 • Spells and spell casting
 • Equippable and consumable items
-`,images:{main:"https://user-images.githubusercontent.com/112477158/212632090-9adf0583-a11c-4198-88a6-4189920c985c.png",gallery:["https://user-images.githubusercontent.com/112477158/212632269-e50b693f-d1a6-42f1-b699-1dc163485bc4.png","https://user-images.githubusercontent.com/112477158/212632343-92c39cc8-7e57-48a7-9467-bb6fbf1ebd47.png","https://user-images.githubusercontent.com/112477158/212632367-3788053c-b001-483c-9b20-081faedac5ea.png","https://user-images.githubusercontent.com/112477158/212632395-d1e8bdee-cb99-42ab-8c47-ce81fc761476.png","https://user-images.githubusercontent.com/112477158/212632505-3e6ac2f0-99ae-40c0-af3a-9be5f57fdd09.png","https://user-images.githubusercontent.com/112477158/212632415-c08fbf0d-1703-4a8a-9a05-36b72161cb50.png","https://user-images.githubusercontent.com/112477158/212632567-b7131667-6648-4659-857e-980947e35621.png","https://user-images.githubusercontent.com/112477158/212632536-c452fc4d-6c99-463c-a1c0-d93e6cfa9c1d.png","https://user-images.githubusercontent.com/112477158/212632434-69f39a58-b7b2-4e22-9188-741bf215c008.png"]},githubUrl:"https://github.com/nihanbir/slappy-knut"},{id:"6",title:"sk8escape",technologies:["Unity","C#","Jira","Github","Firebase","Google Play Console"],shortDescription:"This is a mobile game for Android, unfortunately it's not available to download anymore",role:["Backend"],teamSize:"17 people",duration:"4 weeks",fullDescription:`This was my only backend experience—I single-handedly implemented the entire backend, and it was challenging yet quite fun. I was also all over the project to fix bugs and review code.
+`,images:{main:"https://user-images.githubusercontent.com/112477158/212632090-9adf0583-a11c-4198-88a6-4189920c985c.png",gallery:["https://drive.google.com/file/d/1QFLizrR-AQoP6wq-GIOo-VSBipZY0bFZ/view?usp=sharing","https://user-images.githubusercontent.com/112477158/212632269-e50b693f-d1a6-42f1-b699-1dc163485bc4.png","https://user-images.githubusercontent.com/112477158/212632343-92c39cc8-7e57-48a7-9467-bb6fbf1ebd47.png","https://user-images.githubusercontent.com/112477158/212632367-3788053c-b001-483c-9b20-081faedac5ea.png","https://user-images.githubusercontent.com/112477158/212632395-d1e8bdee-cb99-42ab-8c47-ce81fc761476.png","https://user-images.githubusercontent.com/112477158/212632505-3e6ac2f0-99ae-40c0-af3a-9be5f57fdd09.png","https://user-images.githubusercontent.com/112477158/212632415-c08fbf0d-1703-4a8a-9a05-36b72161cb50.png","https://user-images.githubusercontent.com/112477158/212632567-b7131667-6648-4659-857e-980947e35621.png","https://user-images.githubusercontent.com/112477158/212632536-c452fc4d-6c99-463c-a1c0-d93e6cfa9c1d.png","https://user-images.githubusercontent.com/112477158/212632434-69f39a58-b7b2-4e22-9188-741bf215c008.png"]},githubUrl:"https://github.com/nihanbir/slappy-knut"},{id:"6",title:"sk8escape",technologies:["Unity","C#","Jira","Github","Firebase","Google Play Console"],shortDescription:"This is a mobile game for Android, unfortunately it's not available to download anymore",role:["Backend"],teamSize:"17 people",duration:"4 weeks",fullDescription:`This was my only backend experience—I single-handedly implemented the entire backend, and it was challenging yet quite fun. I was also all over the project to fix bugs and review code.
 Responsibilities:
 • Implementation of the backend using Firebase, including analytics, online data storage, and authentication via Google Play Games.
 • Structuring the project by creating UML and TDD.
