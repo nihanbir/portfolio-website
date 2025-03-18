@@ -19,6 +19,8 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
     const [showCodeSnippets, setShowCodeSnippets] = useState(false);
     const [showAdditionalText, setShowAdditionalText] = useState(false);
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+    const [useExpandableSections, setUseExpandableSections] = useState(true);
 
 
     const handleToggle = () => {
@@ -41,13 +43,69 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         } else {
             setHeight(null);
         }
-    }, [isExpanded, project, showCodeSnippets, showAdditionalText, activeTab]);
+    }, [isExpanded, project, showCodeSnippets, showAdditionalText, activeTab, expandedSections]);
 
     // Function to handle image errors
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
         e.currentTarget.src = '/api/placeholder/400/300';
     };
+    const toggleSection = (sectionId: string) => {
+        setExpandedSections(prev => ({
+            ...prev,
+            [sectionId]: !prev[sectionId]
+        }));
+    };
+        if (!project.fullDescription) return [];
 
+        const parseDescriptionSections = () => {
+            if (!project.fullDescription) return [];
+            
+        const sections: { title: string; content: string }[] = [];
+        const lines = project.fullDescription.split('\n');
+
+        let currentTitle = '';
+        let currentContent: string[] = [];
+
+        lines.forEach(line => {
+            // Check if the line looks like a title (ends with a colon or is in all caps)
+            const isTitleLine = line.trim().endsWith(':') ||
+                (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
+
+            if (isTitleLine) {
+                // If we have a previous section, save it
+                if (currentTitle && currentContent.length) {
+                    sections.push({
+                        title: currentTitle,
+                        content: currentContent.join('\n')
+                    });
+                    currentContent = [];
+                }
+                currentTitle = line.trim();
+            } else if (line.trim()) {
+                // If it's not a title and not empty, add to current content
+                currentContent.push(line);
+            }
+        });
+        
+        if (currentTitle && currentContent.length) {
+            sections.push({
+                title: currentTitle,
+                content: currentContent.join('\n')
+            });
+        }
+
+        // If no sections were found but there's content, create a default section
+        if (sections.length === 0 && project.fullDescription.trim()) {
+            return [{
+                title: 'Overview',
+                content: project.fullDescription
+            }];
+        }
+
+        return sections;
+    };
+        const descriptionSections = parseDescriptionSections();
+    
     return (
         <div
             id={`project-${project.id}`}
@@ -133,9 +191,42 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             />
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-4 mt-6">
                             <h3 className="text-xl font-semibold">About the Project</h3>
-                            <p className="text-foreground/90 leading-relaxed">{project.fullDescription}</p>
+
+                            {descriptionSections.length > 0 ? (
+                                <div className="space-y-4">
+                                    {descriptionSections.map((section, index) => {
+                                        const sectionId = `section-${project.id}-${index}`;
+                                        const isExpanded = expandedSections[sectionId] !== false;
+
+                                        return (
+                                            <div key={sectionId} className="border border-muted rounded-md">
+                                                <button
+                                                    onClick={() => toggleSection(sectionId)}
+                                                    className="flex justify-between items-center w-full p-3 text-left bg-muted/50 hover:bg-muted transition-colors rounded-t-md"
+                                                >
+                                                    <span className="font-medium">{section.title}</span>
+                                                    {isExpanded ?
+                                                        <ChevronUp className="h-4 w-4 text-primary"/> :
+                                                        <ChevronDown className="h-4 w-4 text-primary"/>
+                                                    }
+                                                </button>
+                                                <div
+                                                    className={cn(
+                                                        "p-3 transition-all duration-300",
+                                                        !isExpanded && "hidden"
+                                                    )}
+                                                >
+                                                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line">{section.content}</p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <p className="text-foreground/90 leading-relaxed">{project.fullDescription}</p>
+                            )}
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -187,7 +278,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                             rel="noopener noreferrer"
                                             className="flex items-center px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
                                         >
-                                            <Link size={16} className="mr-1" />
+                                            <Link size={16} className="mr-1"/>
                                             <span>Live Demo</span>
                                         </a>
                                     )}
@@ -212,8 +303,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
                                     {showCodeSnippets && project.codeSnippets && project.codeSnippets.length > 0 && (
                                         <div className="mt-4 animate-fade-in">
-                                            <Tabs defaultValue={project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()}
-                                                  onValueChange={setActiveTab}
+                                            <Tabs
+                                                defaultValue={project.codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase()}
+                                                onValueChange={setActiveTab}
                                             >
                                                 <TabsList className="mb-2">
                                                     {project.codeSnippets.map((snippet) => (
@@ -232,8 +324,10 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                                         value={snippet.title.replace(/\s+/g, '-').toLowerCase()}
                                                     >
                                                         <div className="relative">
-                                                            <pre className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
-                                                                <code className="font-mono whitespace-pre">{snippet.code}</code>
+                                                            <pre
+                                                                className="max-h-96 overflow-y-auto p-4 text-sm bg-muted rounded-md">
+                                                                <code
+                                                                    className="font-mono whitespace-pre">{snippet.code}</code>
                                                             </pre>
                                                         </div>
                                                     </TabsContent>

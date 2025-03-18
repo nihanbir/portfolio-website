@@ -14,10 +14,10 @@ export const projects: Project[] = [
             "As the scrum master and primary programmer, I coordinated the development of the vertical slice, working closely with artists, designers, and management to ensure the vision was realized.\n" +
             "\n" +
             "Programming (C++ / UE5.4):\n" +
-            "Developed core gameplay mechanics using C++ in Unreal Engine 5.\n" +
-            "Implemented key features like [combat system, player movement, AI, environment interactions, etc.]\n" +
-            "Integrated animations, physics, and UI elements with the game loop.\n" +
-            "Debugged and optimized the code for performance, ensuring smooth gameplay within the vertical slice.\n" +
+            "- Developed core gameplay mechanics using C++ in Unreal Engine 5.\n" +
+            "- Implemented key features like [combat system, player movement, AI, environment interactions, etc.]\n" +
+            "- Integrated animations, physics, and UI elements with the game loop.\n" +
+            "- Debugged and optimized the code for performance, ensuring smooth gameplay within the vertical slice.\n" +
             "Team Leadership and Management:\n" +
             "Acted as the primary point of communication between the development team and management.\n" +
             "Organized daily standups, managed tasks in Jira, and ensured milestones were met.\n" +
