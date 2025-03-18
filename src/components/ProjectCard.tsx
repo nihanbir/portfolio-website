@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {ChevronDown, ChevronUp, Link, Github, Calendar, Users, Monitor, Code, Play} from 'lucide-react';
+import {ChevronDown, ChevronUp, Link, Calendar, Users, Monitor, Code, Play} from 'lucide-react';
+import { FaGithub } from "react-icons/fa";
 import { cn } from '@/lib/utils';
 import {Button} from "@/components/ui/button.tsx";
 import {Tabs, TabsList, TabsContent, TabsTrigger} from "@/components/ui/tabs";
@@ -86,16 +87,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                     currentContent = [];
                 }
                 currentTitle = line.trim();
-            } else if (line.trim()) {
+            } else if (line.trim() || (currentContent.length > 0 && line === '')) {
                 // If it's not a title and not empty, add to current content or intro
                 if (parsingIntro && sections.length === 0 && !currentTitle) {
                     introText += (introText ? '\n' : '') + line;
                 } else {
                     currentContent.push(line);
                 }
-            } else if (line === '' && currentContent.length > 0) {
-                // Preserve empty lines in content, but not at the beginning
-                currentContent.push(line);
             }
         });
 
@@ -245,8 +243,10 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                                                         className="text-foreground/90 leading-relaxed whitespace-pre-line"
                                                         dangerouslySetInnerHTML={{
                                                             __html: section.content
-                                                                .replace(/\n- /g, '<br>• ')
-                                                                .replace(/^\s*- /gm, '• ')
+                                                                .replace(/\n {2}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;• ')  // Sub-bullet points (2 spaces)
+                                                                .replace(/\n {4}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ')  // Sub-sub-bullet points (4 spaces)
+                                                                .replace(/\n- /g, '<br>• ')  // Main bullet points
+                                                                .replace(/^\s*- /gm, '• ')  // Bullet points at start of content
                                                         }}
                                                     />
                                                 </div>
@@ -395,7 +395,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             {project.githubUrl && (
                                 <Button variant="outline" asChild>
                                     <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                                        <Github className="w-4 h-4 mr-2"/>
+                                        <FaGithub className="w-4 h-4 mr-2"/>
                                         GitHub Repository
                                     </a>
                                 </Button>
