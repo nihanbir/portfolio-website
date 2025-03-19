@@ -192,11 +192,10 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
             )}
         >
             <div className="p-4 sm:p-6">
-                <div className="p-4 sm:p-6">
                     <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
                         <div className="flex flex-col space-y-2 flex-grow">
                             <h2 className="text-xl sm:text-2xl font-bold text-primary">{project.title}</h2>
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex-wrap">
                                 {project.technologies.map((tech) => (
                                     <span key={tech} className="tech-tag text-xs sm:text-sm">
                                         {tech}
@@ -232,13 +231,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             transition: 'max-height 0.5s ease, opacity 0.3s ease'
                         }}
                     >
-                        <div className="pt-4 space-y-6">
-                            <ImageGallery
-                                images={project.images.gallery}
-                                mainImage={project.images.main}
-                                projectTitle={project.title}
-                            />
-                        </div>
+                        {/*<div className="pt-4 space-y-6">*/}
+                        {/*    <ImageGallery*/}
+                        {/*        images={project.images.gallery}*/}
+                        {/*        mainImage={project.images.main}*/}
+                        {/*        projectTitle={project.title}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
 
                         <FullDescription introText={introText} sections={sections} projectId={project.id} />
 
@@ -344,7 +343,6 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             )}
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     );
