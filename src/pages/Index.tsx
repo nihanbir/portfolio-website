@@ -93,7 +93,7 @@ const Index = () => {
                     </div>
                     <section id="projects" className="py-12">
                         <div className="flex-1 px-4 md:px-8">
-                            <div className="mb-8 hidden md:block">
+                            <div className="mb-8">
                                 <ProjectFilter
                                     technologies={allTechnologies}
                                     selectedTechs={selectedTechs}
