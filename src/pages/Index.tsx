@@ -72,7 +72,11 @@ const Index = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            <Header/>
+            
+            <div className={"sticky top-0 z-[100]"}>
+                <Header/>
+            </div>
+            
             <main className="container mx-auto pb-20">
                 <section id="about">
                     <About/>
@@ -127,7 +131,7 @@ const Index = () => {
             </main>
             <Footer/>
         </div>
-);
+    );
 };
 
 export default Index;
