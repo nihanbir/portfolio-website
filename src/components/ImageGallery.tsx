@@ -145,7 +145,26 @@ export function ImageGallery({
   const handleMouseUp = () => {
     setIsPanning(false);
   };
-
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (zoomLevel > 1 && e.touches.length === 1) {
+      setIsPanning(true);
+      setStartPanPosition({
+        x: e.touches[0].clientX - panPosition.x,
+        y: e.touches[0].clientY - panPosition.y
+      });
+    }
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isPanning && zoomLevel > 1 && e.touches.length === 1) {
+      e.preventDefault();
+      const newX = e.touches[0].clientX - startPanPosition.x;
+      const newY = e.touches[0].clientY - startPanPosition.y;
+      setPanPosition({ x: newX, y: newY });
+    }
+  };
+  const handleTouchEnd = () => {
+    setIsPanning(false);
+  };
   // Handle mouse wheel zoom
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -184,7 +203,7 @@ export function ImageGallery({
 
   // Function to handle image errors
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = '/api/placeholder/400/300';
+    e.currentTarget.src = '/api/placeholder/300/200';
   };
 
   // Click handler that properly prevents propagation
@@ -200,7 +219,7 @@ export function ImageGallery({
     return (
         <div
             className={cn(
-                "fixed inset-0 z-50 transition-all duration-300",
+                "fixed inset-0 z-50 transition-all duration-300 overscroll-none",
                 modalVisible ? "bg-black/90 opacity-100" : "bg-black/0 opacity-0"
             )}
             onClick={zoomLevel > 1 ? undefined : closeModal}
@@ -214,14 +233,14 @@ export function ImageGallery({
           >
             <button
                 onClick={e => handleZoomButtonClick(e, closeModal)}
-                className="absolute top-4 right-4 text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200 z-10"
+                className="absolute top-20 right-4 text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200 z-10"
                 aria-label="Close modal"
             >
-              <X size={28} />
+              <X size={24} />
             </button>
 
             {/* Zoom controls */}
-            <div className="absolute top-4 left-4 flex space-x-2 z-10">
+            <div className="absolute top-20 md:top-20 left-4 flex space-x-2 z-10 ">
               <button
                   onClick={e => handleZoomButtonClick(e, zoomIn)}
                   className="text-white hover:text-primary bg-black/30 rounded-full p-2 transition-colors duration-200"
@@ -248,7 +267,7 @@ export function ImageGallery({
             </div>
 
             {/* Current zoom level indicator */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full z-10">
+            <div className="absolute top-20 left-1/2 -translate-x-1/2 bg-black/30 text-white px-3 py-1 rounded-full z-10">
               {Math.round(zoomLevel * 100)}%
             </div>
 
@@ -259,7 +278,7 @@ export function ImageGallery({
                       className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-primary p-3 rounded-full bg-black/30 transition-colors duration-200 hover:bg-black/50 z-10"
                       aria-label="Previous image"
                   >
-                    <ChevronLeft size={28} />
+                    <ChevronLeft size={24} />
                   </button>
 
                   <button
@@ -267,7 +286,7 @@ export function ImageGallery({
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-primary p-3 rounded-full bg-black/30 transition-colors duration-200 hover:bg-black/50 z-10"
                       aria-label="Next image"
                   >
-                    <ChevronRight size={28} />
+                    <ChevronRight size={24} />
                   </button>
                 </>
             )}
@@ -282,13 +301,16 @@ export function ImageGallery({
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
                 onWheel={handleWheel}
             >
               <div className="relative overflow-hidden">
                 <img
                     src={modalImage}
                     alt={getCaption(modalImage)}
-                    className="max-w-full max-h-[80vh] object-contain shadow-2xl will-change-transform"
+                    className="max-w-full max-h-[75vh] object-contain shadow-2xl will-change-transform touch-none"
                     onError={handleImageError}
                     style={{
                       transform: `scale(${zoomLevel}) translate(${panPosition.x / zoomLevel}px, ${panPosition.y / zoomLevel}px)`,
@@ -297,11 +319,11 @@ export function ImageGallery({
                     }}
                 />
               </div>
-              <div className="mt-4 text-white bg-black/50 px-4 py-2 rounded-md w-full max-w-3xl">
+              <div className="mt-2 md:mt-4 text-white bg-black/50 px-3 py-2 rounded-md w-full max-w-3xl">
                 <p className="text-lg font-medium text-center">
                   {getCaption(modalImage)}
                 </p>
-                <p className="text-white/70 text-center text-sm mt-1">
+                <p className="text-white/70 text-center text-xs md:text-sm mt-1">
                   {allImages.indexOf(modalImage) + 1} / {allImages.length}
                 </p>
               </div>
@@ -312,59 +334,60 @@ export function ImageGallery({
   };
 
   return (
-      <div className="space-y-3">
-        <div className="relative">
-          {/* Main image container with caption */}
-          <div
-              className="w-full h-64 md:h-96 rounded-lg overflow-hidden cursor-pointer relative group"
-              onClick={() => openModal(currentImage)}
-          >
-            <img
-                src={currentImage}
-                alt={getCaption(currentImage)}
-                className="w-full h-full object-cover object-center transition-transform group-hover:scale-105 duration-300"
-                onError={handleImageError}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <ZoomIn size={36} className="text-white" />
-            </div>
+    <div className="image-gallery-container space-y-3">
+      <div className="relative">
+        {/* Main image container with caption */}
+        <div
+            className="w-full h-64 md:h-96 rounded-lg overflow-hidden cursor-pointer relative group"
+            onClick={() => openModal(currentImage)}
+        >
+          <img
+              src={currentImage}
+              alt={getCaption(currentImage)}
+              className="w-full h-full object-cover object-center transition-transform group-hover:scale-105 duration-300"
+              onError={handleImageError}
+              style={{ maxWidth: '100%', height: 'auto' }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <ZoomIn size={36} className="text-white" />
+          </div>
 
-            {/* Caption on the main card image */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent text-white transform transition-transform duration-300">
-              <p className="text-sm md:text-base font-medium truncate">
-                {getCaption(currentImage)}
-              </p>
-            </div>
+          {/* Caption on the main card image */}
+          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent text-white transform transition-transform duration-300">
+            <p className="text-sm md:text-base font-medium truncate">
+              {getCaption(currentImage)}
+            </p>
           </div>
         </div>
-
-        <div className="flex space-x-2 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent">
-          {allImages.map((image, index) => (
-              <div
-                  key={index}
-                  className={cn(
-                      "relative w-16 h-16 md:w-20 md:h-20 rounded overflow-hidden cursor-pointer flex-shrink-0 border-2 transition-transform hover:scale-105 duration-200",
-                      currentImage === image ? "border-primary" : "border-transparent"
-                  )}
-                  onClick={() => setCurrentImage(image)}
-              >
-                <img
-                    src={image}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    onError={handleImageError}
-                />
-
-                {/* Small indicator for thumbnail captions on hover */}
-                <div className="absolute inset-x-0 bottom-0 bg-black/70 text-white text-xs py-1 opacity-0 hover:opacity-100 transition-opacity duration-200 truncate text-center">
-                  {index === 0 ? "Main" : `View ${index}`}
-                </div>
-              </div>
-          ))}
-        </div>
-
-        {modalPortal && createPortal(<Modal />, modalPortal)}
       </div>
+
+      <div className="flex flex-wrap space-x-2 overflow-x-hidden py-2 scrollbar-thin scrollbar-thumb-primary scrollbar-track-transparent">
+        {allImages.map((image, index) => (
+          <div
+              key={index}
+              className={cn(
+                  "relative w-14 h-14 md:w-20 md:h-20 rounded overflow-hidden cursor-pointer flex-shrink-0 border-2 transition-transform hover:scale-105 duration-200",
+                  currentImage === image ? "border-primary" : "border-transparent"
+              )}
+              onClick={() => setCurrentImage(image)}
+          >
+            <img
+                src={image}
+                alt={`Thumbnail ${index + 1}`}
+                className="w-full h-full object-cover"
+                onError={handleImageError}
+            />
+
+            {/* Small indicator for thumbnail captions on hover */}
+            <div className="absolute inset-x-0 bottom-0 bg-black/70 text-white text-xs py-1 opacity-0 hover:opacity-100 transition-opacity duration-200 truncate text-center">
+              {index === 0 ? "Main" : `View ${index}`}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {modalPortal && createPortal(<Modal />, modalPortal)}
+    </div>
   );
 }

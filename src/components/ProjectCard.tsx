@@ -231,13 +231,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             transition: 'max-height 0.5s ease, opacity 0.3s ease'
                         }}
                     >
-                        {/*<div className="pt-4 space-y-6">*/}
-                        {/*    <ImageGallery*/}
-                        {/*        images={project.images.gallery}*/}
-                        {/*        mainImage={project.images.main}*/}
-                        {/*        projectTitle={project.title}*/}
-                        {/*    />*/}
-                        {/*</div>*/}
+                        <div className="pt-4 space-y-6">
+                            <ImageGallery
+                                images={project.images.gallery}
+                                mainImage={project.images.main}
+                                projectTitle={project.title}
+                            />
+                        </div>
 
                         <FullDescription introText={introText} sections={sections} projectId={project.id} />
 
