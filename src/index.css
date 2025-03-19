@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -61,6 +60,38 @@
 
   .code-highlight {
     @apply bg-muted rounded p-4 overflow-x-auto text-sm;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px; /* Smaller font size for mobile */
+  }
+
+  #root {
+    padding: 1rem; /* Smaller padding for mobile */
+  }
+
+  .logo {
+    height: 4em; /* Smaller logo for mobile */
+    padding: 1em;
+  }
+
+  .card {
+    padding: 1em; /* Smaller padding for mobile cards */
+  }
+
+  .project-card-expanded {
+    max-height: 1000px; /* Smaller max-height for mobile */
+  }
+
+  .project-card-collapsed {
+    max-height: 100px; /* Smaller max-height for mobile */
+  }
+
+  .tech-tag {
+    @apply px-2 py-1 text-xs; /* Smaller padding and font size for mobile */
   }
 }
 

@@ -5,6 +5,22 @@
   text-align: center;
 }
 
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  #root {
+    padding: 1rem; /* Smaller padding for mobile */
+  }
+
+  .logo {
+    height: 4em; /* Smaller logo for mobile */
+    padding: 1em;
+  }
+
+  .card {
+    padding: 1em; /* Smaller padding for mobile cards */
+  }
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
