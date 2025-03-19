@@ -77,7 +77,7 @@ const Index = () => {
                 <Header/>
             </div>
             
-            <main className="container mx-auto pb-20">
+            <main className="container mx-auto pb-20 pl-0 sm:pl-4">
                 <section id="about">
                     <About/>
                 </section>
