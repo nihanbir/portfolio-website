@@ -10,11 +10,19 @@ interface CodeSnippet {
 
 interface CodeSnippetsProps {
     codeSnippets: CodeSnippet[];
+    onExpandChange?: (expanded: boolean) => void;
 }
 
-export function CodeSnippets({ codeSnippets }: CodeSnippetsProps) {
+export function CodeSnippets({ codeSnippets, onExpandChange }: CodeSnippetsProps) {
     const [showCodeSnippets, setShowCodeSnippets] = useState(false);
     const [activeTab, setActiveTab] = useState(codeSnippets[0].title.replace(/\s+/g, '-').toLowerCase());
+
+    const handleToggle = () => {
+        setShowCodeSnippets(!showCodeSnippets);
+        if (onExpandChange) {
+            onExpandChange(!showCodeSnippets);
+        }
+    };
 
     return (
         <div className="border-b border-border pb-6">
@@ -23,7 +31,7 @@ export function CodeSnippets({ codeSnippets }: CodeSnippetsProps) {
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setShowCodeSnippets(!showCodeSnippets)}
+                    onClick={handleToggle}
                     className="flex items-center"
                 >
                     <Code className="w-4 h-4 mr-2" />

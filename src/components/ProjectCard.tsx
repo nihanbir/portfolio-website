@@ -7,9 +7,7 @@ import { ImageGallery } from "@/components/ImageGallery.tsx";
 import { MiniImageGallery } from "@/components/MiniImageGallery.tsx";
 import { FullDescription } from "@/components/FullDescription.tsx";
 import { CodeSnippets } from "@/components/CodeSnippets.tsx";
-
-
-import { Project } from '@/data'; // Ensure this path is correct
+import { Project } from '@/data';
 
 // ProjectCard Component
 export interface ProjectCardProps {
@@ -23,6 +21,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
     const [height, setHeight] = useState<number | null>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [showAdditionalText, setShowAdditionalText] = useState(false);
+    const [codeSnippetsExpanded, setCodeSnippetsExpanded] = useState(false);
 
     const handleToggle = () => {
         onToggleExpand();
@@ -37,7 +36,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         } else {
             setHeight(null);
         }
-    }, [isExpanded, project, showAdditionalText]);
+    }, [isExpanded, project, showAdditionalText, codeSnippetsExpanded]);
 
     const { introText, sections } = parseDescriptionSections(project);
 
@@ -154,9 +153,10 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                         </div>
 
                         {project.codeSnippets && project.codeSnippets.length > 0 && (
-                            
-                            
-                            <CodeSnippets codeSnippets={project.codeSnippets} />
+                            <CodeSnippets
+                                codeSnippets={project.codeSnippets}
+                                onExpandChange={(expanded) => setCodeSnippetsExpanded(expanded)}
+                            />
                         )}
                     </div>
 
@@ -210,56 +210,56 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
 
 // Helper function to parse description sections
 function parseDescriptionSections(project: Project) {
-if (!project.fullDescription) return { introText: '', sections: [] };
+    if (!project.fullDescription) return { introText: '', sections: [] };
 
-const lines = project.fullDescription.split('\n');
-let introText = '';
-const sections: { title: string; content: string }[] = [];
+    const lines = project.fullDescription.split('\n');
+    let introText = '';
+    const sections: { title: string; content: string }[] = [];
 
-let currentTitle = '';
-let currentContent: string[] = [];
-let parsingIntro = true;
+    let currentTitle = '';
+    let currentContent: string[] = [];
+    let parsingIntro = true;
 
-lines.forEach(line => {
-    const isTitleLine = line.trim().endsWith(':') ||
-        (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
+    lines.forEach(line => {
+        const isTitleLine = line.trim().endsWith(':') ||
+            (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
 
-    if (isTitleLine) {
-        parsingIntro = false;
+        if (isTitleLine) {
+            parsingIntro = false;
 
-        if (currentTitle && currentContent.length) {
-            sections.push({
-                title: currentTitle,
-                content: currentContent.join('\n')
-            });
-            currentContent = [];
+            if (currentTitle && currentContent.length) {
+                sections.push({
+                    title: currentTitle,
+                    content: currentContent.join('\n')
+                });
+                currentContent = [];
+            }
+            currentTitle = line.trim();
+        } else if (line.trim() || (currentContent.length > 0 && line === '')) {
+            if (parsingIntro && sections.length === 0 && !currentTitle) {
+                introText += (introText ? '\n' : '') + line;
+            } else {
+                currentContent.push(line);
+            }
         }
-        currentTitle = line.trim();
-    } else if (line.trim() || (currentContent.length > 0 && line === '')) {
-        if (parsingIntro && sections.length === 0 && !currentTitle) {
-            introText += (introText ? '\n' : '') + line;
-        } else {
-            currentContent.push(line);
-        }
-    }
-});
-
-if (currentTitle && currentContent.length) {
-    sections.push({
-        title: currentTitle,
-        content: currentContent.join('\n')
     });
-}
 
-if (sections.length === 0 && project.fullDescription.trim() && !introText) {
-    return {
-        introText: '',
-        sections: [{
-            title: 'Overview',
-            content: project.fullDescription
-        }]
-    };
-}
+    if (currentTitle && currentContent.length) {
+        sections.push({
+            title: currentTitle,
+            content: currentContent.join('\n')
+        });
+    }
 
-return { introText, sections };
+    if (sections.length === 0 && project.fullDescription.trim() && !introText) {
+        return {
+            introText: '',
+            sections: [{
+                title: 'Overview',
+                content: project.fullDescription
+            }]
+        };
+    }
+
+    return { introText, sections };
 }
