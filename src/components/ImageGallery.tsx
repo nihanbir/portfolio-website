@@ -334,7 +334,7 @@ export function ImageGallery({
   };
 
   return (
-    <div className="image-gallery-container space-y-3">
+    <div className="space-y-3">
       <div className="relative">
         {/* Main image container with caption */}
         <div
@@ -346,7 +346,6 @@ export function ImageGallery({
               alt={getCaption(currentImage)}
               className="w-full h-full object-cover object-center transition-transform group-hover:scale-105 duration-300"
               onError={handleImageError}
-              style={{ maxWidth: '100%', height: 'auto' }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-100 group-hover:opacity-0 transition-opacity duration-300" />
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -367,7 +366,7 @@ export function ImageGallery({
           <div
               key={index}
               className={cn(
-                  "relative w-14 h-14 md:w-20 md:h-20 rounded overflow-hidden cursor-pointer flex-shrink-0 border-2 transition-transform hover:scale-105 duration-200",
+                  "relative w-16 h-16 md:w-20 md:h-20 rounded overflow-hidden cursor-pointer flex-shrink-0 border-2 transition-transform hover:scale-105 duration-200",
                   currentImage === image ? "border-primary" : "border-transparent"
               )}
               onClick={() => setCurrentImage(image)}
