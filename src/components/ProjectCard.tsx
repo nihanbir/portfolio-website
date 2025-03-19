@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Link, Calendar, Users, Monitor, Code, Play } from 'lucide-react';
+import { ChevronDown, ChevronUp, Link, Calendar, Users, Monitor, Play } from 'lucide-react';
 import { FaGithub } from "react-icons/fa";
 import { cn } from '@/lib/utils';
 import { Button } from "@/components/ui/button.tsx";
