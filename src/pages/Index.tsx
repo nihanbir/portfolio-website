@@ -5,7 +5,6 @@ import { ProjectNavigation } from '@/components/ProjectNavigation';
 import { ProjectFilter } from '@/components/ProjectFilter';
 import { projects, getAllTechnologies } from '@/data/projects';
 import { Project } from '@/data';
-import { ChevronRight, ChevronLeft, Download, Mail, Linkedin } from 'lucide-react';
 import Footer from '@/components/Footer';
 import About from "@/components/About.tsx";
 
@@ -74,26 +73,21 @@ const Index = () => {
     return (
         <div className="min-h-screen bg-background">
             <Header/>
-            <main className="container mx-auto pb-20 pl-56">
-                <About/>
-                <section id="projects" className="py-12">
-                    <div className="flex justify-between flex-col md:flex-row">
-                        <div className="md:hidden mb-6 px-4">
-                            <ProjectFilter
-                                technologies={allTechnologies}
-                                selectedTechs={selectedTechs}
-                                onFilterChange={handleFilterChange}
-                            />
-                        </div>
-
+            <main className="container mx-auto pb-20">
+                <section id="about">
+                    <About/>
+                </section>
+                <div className="flex">
+                    {/* Project Navigation (Sidebar) */}
+                    <div className="sticky top-20 h-screen w-50 flex">
                         <ProjectNavigation
                             projects={filteredProjects}
                             expandedProjects={expandedProjects}
                             activeProject={activeProject}
                             onProjectSelect={handleProjectSelect}
-                            className="md:block hidden"
                         />
-
+                    </div>
+                    <section id="projects" className="py-12">
                         <div className="flex-1 px-4 md:px-8">
                             <div className="mb-8 hidden md:block">
                                 <ProjectFilter
@@ -128,13 +122,12 @@ const Index = () => {
                                 )}
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </main>
-
             <Footer/>
         </div>
-    );
+);
 };
 
 export default Index;
