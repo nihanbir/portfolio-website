@@ -78,11 +78,11 @@ const Index = () => {
                 <Header/>
             </div>
 
-            <main className="container mx-auto pb-20 pl-0 sm:pl-4">
+            <main className="container mx-auto pb-20">
                 <section id="about">
                     <About/>
                 </section>
-                <div className="flex">
+                <div className="flex flex-col md:flex-row">
                     {/* Project Navigation (Sidebar) */}
                     <ProjectNavigation
                         projects={filteredProjects}
@@ -92,7 +92,7 @@ const Index = () => {
                     />
 
                     {/* Main Content */}
-                    <section id="projects" className="py-12 pl-12"> {/* Adjusted padding to account for sidebar */}
+                    <section id="projects" className="py-12 pl-0 md:pl-12">
                         <div className="flex-1 px-4 md:px-8">
                             <div className="mb-8">
                                 <ProjectFilter

@@ -48,7 +48,7 @@ export function ProjectNavigation({
 
     return (
         <div className={cn(
-            "bg-sidebar h-screen fixed top-20 left-0 transition-all duration-300 z-50",
+            "bg-sidebar h-[calc(100vh-5rem)] fixed top-20 left-0 transition-all duration-300 z-50",
             isCollapsed ? "w-12" : "w-56",
             className
         )}>
