@@ -54,8 +54,7 @@ const Header = () => {
             size="sm"
             className="bg-primary hover:bg-primary/80"
             onClick={() => window.open("https://drive.google.com/file/d/1A6_HwBJxGN1WgQ2RpU-nieYb4UAETG_P/view?usp=sharing",
-                "_blank",
-                "noopener,noreferrer"
+                "_blank"
             )}
           >
             <span>View CV</span>
