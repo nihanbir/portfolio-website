@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -11,10 +11,20 @@ interface FullDescriptionProps {
     introText: string;
     sections: Section[];
     projectId: string;
+    isExpanded: boolean;
+    onHeightChange: (height: number) => void; // Callback to notify parent of height changes
 }
 
-export function FullDescription({ introText, sections, projectId }: FullDescriptionProps) {
-    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+export function FullDescription({ introText, sections, projectId, isExpanded, onHeightChange }: FullDescriptionProps) {
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(
+        sections.reduce((acc, _, index) => {
+            const sectionId = `section-${projectId}-${index}`;
+            acc[sectionId] = false;
+            return acc;
+        }, {} as Record<string, boolean>)
+    );
+
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const toggleSection = (sectionId: string) => {
         setExpandedSections(prev => ({
@@ -23,8 +33,16 @@ export function FullDescription({ introText, sections, projectId }: FullDescript
         }));
     };
 
+    // Notify parent of height changes when sections are expanded/collapsed
+    useEffect(() => {
+        if (contentRef.current) {
+            const height = contentRef.current.scrollHeight;
+            onHeightChange(height);
+        }
+    }, [expandedSections, onHeightChange]);
+
     return (
-        <div className="space-y-4 mt-6">
+        <div className="space-y-4 mt-6" ref={contentRef}>
             <h3 className="text-lg sm:text-xl font-semibold">About the Project</h3>
 
             {introText && (
@@ -37,7 +55,7 @@ export function FullDescription({ introText, sections, projectId }: FullDescript
                 <div className="space-y-4">
                     {sections.map((section, index) => {
                         const sectionId = `section-${projectId}-${index}`;
-                        const isExpanded = expandedSections[sectionId] !== false;
+                        const isSectionExpanded = isExpanded && expandedSections[sectionId] !== false;
 
                         return (
                             <div key={sectionId} className="border border-muted rounded-md">
@@ -46,7 +64,7 @@ export function FullDescription({ introText, sections, projectId }: FullDescript
                                     className="flex justify-between items-center w-full p-3 text-left bg-muted/50 hover:bg-muted transition-colors rounded-t-md"
                                 >
                                     <span className="font-medium text-sm sm:text-base">{section.title}</span>
-                                    {isExpanded ?
+                                    {isSectionExpanded ?
                                         <ChevronUp className="h-4 w-4 text-primary" /> :
                                         <ChevronDown className="h-4 w-4 text-primary" />
                                     }
@@ -54,7 +72,7 @@ export function FullDescription({ introText, sections, projectId }: FullDescript
                                 <div
                                     className={cn(
                                         "p-3 transition-all duration-300",
-                                        !isExpanded && "hidden"
+                                        !isSectionExpanded && "hidden"
                                     )}
                                 >
                                     <div

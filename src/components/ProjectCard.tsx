@@ -9,7 +9,6 @@ import { FullDescription } from "@/components/FullDescription.tsx";
 import { CodeSnippets } from "@/components/CodeSnippets.tsx";
 import { Project } from '@/data';
 
-// ProjectCard Component
 export interface ProjectCardProps {
     project: Project;
     key?: string;
@@ -19,6 +18,7 @@ export interface ProjectCardProps {
 
 export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCardProps) {
     const [height, setHeight] = useState<number | null>(null);
+    const [fullDescriptionHeight, setFullDescriptionHeight] = useState<number>(0); // Track FullDescription height
     const contentRef = useRef<HTMLDivElement>(null);
     const [showAdditionalText, setShowAdditionalText] = useState(false);
     const [codeSnippetsExpanded, setCodeSnippetsExpanded] = useState(false);
@@ -27,16 +27,18 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         onToggleExpand();
     };
 
+    // Calculate the total height of the card content
     useEffect(() => {
         if (contentRef.current && isExpanded) {
             const timer = setTimeout(() => {
-                setHeight(contentRef.current.scrollHeight);
+                const totalHeight = contentRef.current.scrollHeight + fullDescriptionHeight;
+                setHeight(totalHeight);
             }, 0);
             return () => clearTimeout(timer);
         } else {
             setHeight(null);
         }
-    }, [isExpanded, project, showAdditionalText, codeSnippetsExpanded]);
+    }, [isExpanded, project, showAdditionalText, codeSnippetsExpanded, fullDescriptionHeight]);
 
     const { introText, sections } = parseDescriptionSections(project);
 
@@ -94,7 +96,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                         />
                     </div>
 
-                    <FullDescription introText={introText} sections={sections} projectId={project.id} />
+                    <FullDescription
+                        introText={introText}
+                        sections={sections}
+                        projectId={project.id}
+                        isExpanded={isExpanded}
+                        onHeightChange={setFullDescriptionHeight} // Pass the height change callback
+                    />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
                         <div className="space-y-4">
