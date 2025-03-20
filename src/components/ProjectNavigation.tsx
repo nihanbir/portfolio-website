@@ -14,16 +14,18 @@ interface ProjectNavigationProps {
 export function ProjectNavigation({
                                       projects,
                                       expandedProjects,
-                                      activeProject,
                                       onProjectSelect,
                                       className
                                   }: ProjectNavigationProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    
 
     // Check for mobile on initial render
     useEffect(() => {
         const checkMobile = () => {
             if (window.innerWidth < 768) {
+                setIsMobile(true);
                 setIsCollapsed(true);
             }
         };
@@ -48,11 +50,11 @@ export function ProjectNavigation({
 
     return (
         <div className={cn(
-            "bg-sidebar fixed top-20 left-0 transition-all duration-300 z-50 h-full", // Removed fixed height
+            "bg-sidebar fixed top-56 left-0 transition-all duration-300 z-50 h-full", // Removed fixed height
             isCollapsed ? "w-12" : "w-56",
             className
         )}>
-            <div className="sticky top-20 flex flex-col h-full overflow-y-auto">
+            <div className="flex flex-col h-full overflow-y-auto">
                 <div className="flex items-center justify-between p-3 border-b border-sidebar-border">
                     <h3 className={cn(
                         "font-bold transition-opacity duration-300",
@@ -60,13 +62,16 @@ export function ProjectNavigation({
                     )}>
                         Projects
                     </h3>
-                    <button
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="p-1 rounded hover:bg-sidebar-accent transition-colors"
-                        aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
-                    >
-                        {isCollapsed ? <ChevronRight className="text-sidebar-foreground" /> : <ChevronLeft className="text-sidebar-foreground" />}
-                    </button>
+                    {isMobile && (
+                        <button
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                            className="p-1 rounded hover:bg-sidebar-accent transition-colors"
+                            aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
+                        >
+                            {isCollapsed ? <ChevronRight className="text-sidebar-foreground"/> :
+                                <ChevronLeft className="text-sidebar-foreground"/>}
+                        </button>
+                    )}
                 </div>
 
                 <div className="flex-1 overflow-y-auto py-2">

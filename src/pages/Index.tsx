@@ -78,19 +78,18 @@ const Index = () => {
                 <Header/>
             </div>
 
-            <main className="container mx-auto pb-20">
+            <main className="container mx-auto pb-20 pr-0">
                 <section id="about">
                     <About/>
                 </section>
+                {/* Project Navigation (Sidebar) */}
+                <ProjectNavigation
+                    projects={filteredProjects}
+                    expandedProjects={expandedProjects}
+                    activeProject={activeProject}
+                    onProjectSelect={handleProjectSelect}
+                />
                 <div className="flex flex-col md:flex-row">
-                    {/* Project Navigation (Sidebar) */}
-                    <ProjectNavigation
-                        projects={filteredProjects}
-                        expandedProjects={expandedProjects}
-                        activeProject={activeProject}
-                        onProjectSelect={handleProjectSelect}
-                    />
-
                     {/* Main Content */}
                     <section id="projects" className="py-12">
                         <div className="flex-1 px-4 md:px-8">
