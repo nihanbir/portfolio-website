@@ -41,18 +41,18 @@ export function ProjectNavigation({
         setTimeout(() => {
             const element = document.getElementById(`project-${projectId}`);
             if (element) {
-                element.scrollIntoView({  behavior: 'smooth', block: 'start', inline: 'nearest'});
+                element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
             }
         }, 100);
     };
 
     return (
         <div className={cn(
-            "bg-sidebar transition-all duration-300",
+            "bg-sidebar h-screen fixed top-20 left-0 transition-all duration-300 z-50",
             isCollapsed ? "w-12" : "w-56",
             className
         )}>
-            <div className="sticky top-20 flex flex-col overflow-y-auto">
+            <div className="sticky top-20 flex flex-col h-full overflow-y-auto">
                 <div className="flex items-center justify-between p-3 border-b border-sidebar-border">
                     <h3 className={cn(
                         "font-bold transition-opacity duration-300",
@@ -69,7 +69,7 @@ export function ProjectNavigation({
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto py-2 ">
+                <div className="flex-1 overflow-y-auto py-2">
                     {projects.map((project) => (
                         <button
                             key={project.id}

@@ -20,7 +20,7 @@ const Index = () => {
         }
         return [];
     });
-    
+
     const [activeProject, setActiveProject] = useState<string | null>(null);
     const [selectedTechs, setSelectedTechs] = useState<string[]>([]);
     const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
@@ -48,6 +48,7 @@ const Index = () => {
             localStorage.setItem('expandedProjects', JSON.stringify(expandedProjects));
         }
     }, [expandedProjects]);
+
     const handleToggleExpand = (projectId: string) => {
         setExpandedProjects(prev => {
             if (prev.includes(projectId)) {
@@ -57,6 +58,7 @@ const Index = () => {
             }
         });
     };
+
     const handleProjectSelect = (projectId: string) => {
         setActiveProject(projectId);
 
@@ -72,26 +74,25 @@ const Index = () => {
 
     return (
         <div className="min-h-screen bg-background">
-            
             <div className={"sticky top-0 z-[100]"}>
                 <Header/>
             </div>
-            
+
             <main className="container mx-auto pb-20 pl-0 sm:pl-4">
                 <section id="about">
                     <About/>
                 </section>
                 <div className="flex">
                     {/* Project Navigation (Sidebar) */}
-                    <div className="sticky top-20 h-screen w-50 flex">
-                        <ProjectNavigation
-                            projects={filteredProjects}
-                            expandedProjects={expandedProjects}
-                            activeProject={activeProject}
-                            onProjectSelect={handleProjectSelect}
-                        />
-                    </div>
-                    <section id="projects" className="py-12">
+                    <ProjectNavigation
+                        projects={filteredProjects}
+                        expandedProjects={expandedProjects}
+                        activeProject={activeProject}
+                        onProjectSelect={handleProjectSelect}
+                    />
+
+                    {/* Main Content */}
+                    <section id="projects" className="py-12 pl-12"> {/* Adjusted padding to account for sidebar */}
                         <div className="flex-1 px-4 md:px-8">
                             <div className="mb-8">
                                 <ProjectFilter
@@ -129,7 +130,7 @@ const Index = () => {
                     </section>
                 </div>
             </main>
-            <Footer/>
+            <Footer />
         </div>
     );
 };
