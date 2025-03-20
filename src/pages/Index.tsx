@@ -73,7 +73,7 @@ const Index = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background items-center">
             <div className={"sticky top-0 z-[100]"}>
                 <Header/>
             </div>
@@ -92,7 +92,7 @@ const Index = () => {
                     />
 
                     {/* Main Content */}
-                    <section id="projects" className="py-12 pl-0 md:pl-12">
+                    <section id="projects" className="py-12">
                         <div className="flex-1 px-4 md:px-8">
                             <div className="mb-8">
                                 <ProjectFilter
