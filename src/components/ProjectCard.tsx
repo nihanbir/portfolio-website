@@ -49,7 +49,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
             )}
         >
             <div className="p-4 sm:p-6">
-                <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4" onClick={handleToggle}>
                     <div className="flex flex-col space-y-2 flex-grow">
                         <h2 className="text-xl sm:text-2xl font-bold text-primary">{project.title}</h2>
                         <div className="flex-wrap">
@@ -69,15 +69,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                     )}
 
                     <button
-                        onClick={handleToggle}
                         className="p-2 rounded-full hover:bg-muted transition-colors flex-shrink-0"
-                        aria-label={isExpanded ? "Collapse project" : "Expand project"}
                     >
                         {isExpanded ? <ChevronUp className="text-primary" /> : <ChevronDown className="text-primary" />}
                     </button>
                 </div>
 
-                <p className="mb-4 text-sm sm:text-base text-muted-foreground">{project.shortDescription}</p>
+                <p className="mb-4 text-sm sm:text-base text-muted-foreground" onClick={handleToggle}>{project.shortDescription}</p>
 
                 <div
                     ref={contentRef}
