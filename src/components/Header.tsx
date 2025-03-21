@@ -53,7 +53,7 @@ const Header = () => {
             variant="default"
             size="sm"
             className="bg-primary hover:bg-primary/80"
-            onClick={() => window.open("https://drive.google.com/file/d/1A6_HwBJxGN1WgQ2RpU-nieYb4UAETG_P/view?usp=sharing",
+            onClick={() => window.open("https://drive.google.com/file/d/1LJb8c-0pqVJSYfEbKjQuxRJlVT3bp6Xy/view?usp=sharing",
                 "_blank"
             )}
           >
