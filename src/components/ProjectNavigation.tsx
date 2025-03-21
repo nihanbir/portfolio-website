@@ -18,7 +18,6 @@ export function ProjectNavigation({
                                       className
                                   }: ProjectNavigationProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
     const [activeSection, setActiveSection] = useState<string | null>(null);
     const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
 
@@ -26,7 +25,6 @@ export function ProjectNavigation({
     useEffect(() => {
         const checkMobile = () => {
             if (window.innerWidth < 768) {
-                setIsMobile(true);
                 setIsCollapsed(true);
             }
         };
@@ -47,7 +45,11 @@ export function ProjectNavigation({
                 const element = document.getElementById(section);
                 if (element) {
                     const { offsetTop, offsetHeight } = element;
-                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                    const sectionBottom = offsetTop + offsetHeight;
+                    const buffer = 150; // Adjust this value as needed
+
+                    // Check if the scroll position is within the section bounds, including the buffer
+                    if (scrollPosition >= offsetTop - buffer && scrollPosition < sectionBottom - buffer) {
                         if (section.startsWith('project-')) {
                             setActiveProjectId(section.replace('project-', ''));
                             setActiveSection(null);
@@ -74,7 +76,14 @@ export function ProjectNavigation({
         setTimeout(() => {
             const element = document.getElementById(`project-${projectId}`);
             if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+                const offset = 90
+                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
             }
         }, 100);
     };
@@ -116,7 +125,7 @@ export function ProjectNavigation({
                 <div className="flex-1 overflow-y-auto py-2">
                     <div className="border-border">
                         <button
-                            key="About"
+                            key="about"
                             className={cn(
                                 "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
                                 isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
@@ -137,7 +146,7 @@ export function ProjectNavigation({
                         </button>
                     </div>
                     <button
-                        key="Projects"
+                        key="projects"
                         className={cn(
                             "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
                             isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
@@ -156,7 +165,9 @@ export function ProjectNavigation({
                             <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
                         )}
                     </button>
+                    
                     <div className={"border-b border-b-game-accent"}></div>
+                    
                     {projects.map((project) => (
                         <button
                             key={project.id}
