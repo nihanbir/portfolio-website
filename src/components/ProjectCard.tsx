@@ -54,9 +54,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                 <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4" onClick={handleToggle}>
                     <div className="flex flex-col space-y-2 flex-grow">
                         <h2 className="text-xl sm:text-2xl font-bold text-primary">{project.title}</h2>
-                        <div className="flex-wrap">
+                        <div className="flex-wrap bord">
                             {project.technologies.map((tech) => (
-                                <span key={tech} className="tech-tag text-xs sm:text-sm">
+                                <span key={tech} className="tech-tag text-xs sm:text-sm border border-accent/50">
                                     {tech}
                                 </span>
                             ))}
@@ -77,8 +77,9 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                     </button>
                 </div>
 
+                {!isExpanded && (
                 <p className="mb-4 text-sm sm:text-base text-muted-foreground" onClick={handleToggle}>{project.shortDescription}</p>
-
+                )}
                 <div
                     ref={contentRef}
                     style={{
