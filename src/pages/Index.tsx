@@ -94,15 +94,18 @@ const Index = () => {
                     <section id="projects" className="py-12">
                         <div className="flex-1 px-4 md:px-8">
                             <div className="mb-8">
-                                <ProjectFilter
-                                    technologies={allTechnologies}
-                                    selectedTechs={selectedTechs}
-                                    onFilterChange={handleFilterChange}
-                                />
+                                <section id="projectFilter" className="py-12">
+                                
+                                    <ProjectFilter
+                                        technologies={allTechnologies}
+                                        selectedTechs={selectedTechs}
+                                        onFilterChange={handleFilterChange}
+                                    />
+                                </section>
                             </div>
 
                             <div className="space-y-8">
-                                {filteredProjects.length > 0 ? (
+                            {filteredProjects.length > 0 ? (
                                     filteredProjects.map((project) => (
                                         <ProjectCard
                                             key={project.id}

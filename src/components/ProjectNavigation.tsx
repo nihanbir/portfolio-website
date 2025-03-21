@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Project } from '@/data/index.ts';
 import Index from '@/pages/Index.tsx'
 import { cn } from '@/lib/utils';
-import {ChevronLeft, ChevronRight, Monitor, UserIcon, ListFilterIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Monitor, UserIcon, ListFilterIcon } from 'lucide-react';
 
 interface ProjectNavigationProps {
     projects: Project[];
@@ -20,7 +20,8 @@ export function ProjectNavigation({
                                   }: ProjectNavigationProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
-    
+    const [activeSection, setActiveSection] = useState<string | null>(null);
+    const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
 
     // Check for mobile on initial render
     useEffect(() => {
@@ -37,8 +38,38 @@ export function ProjectNavigation({
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    // Scroll event listener to update active section and project
+    useEffect(() => {
+        const handleScroll = () => {
+            const sections = ['about', 'projectFilter', ...projects.map(project => `project-${project.id}`)];
+            const scrollPosition = window.scrollY + 100; // Adjust for header height
+
+            for (const section of sections) {
+                const element = document.getElementById(section);
+                if (element) {
+                    const { offsetTop, offsetHeight } = element;
+                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                        if (section.startsWith('project-')) {
+                            setActiveProjectId(section.replace('project-', ''));
+                            setActiveSection(null);
+                        } else {
+                            setActiveSection(section);
+                            setActiveProjectId(null);
+                        }
+                        break;
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [projects]);
+
     const scrollToProject = (projectId: string) => {
         onProjectSelect(projectId);
+        setActiveProjectId(projectId);
+        setActiveSection(null);
 
         // Allow time for state to update and render
         setTimeout(() => {
@@ -50,6 +81,9 @@ export function ProjectNavigation({
     };
 
     const scrollToSection = (sectionId: string) => {
+        setActiveSection(sectionId);
+        setActiveProjectId(null);
+
         const element = document.getElementById(sectionId);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
@@ -87,42 +121,52 @@ export function ProjectNavigation({
                         key="About"
                         className={cn(
                             "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
-                            isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start"
+                            isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
+                            activeSection === 'about' ? "bg-primary/20 text-primary" : ""
                         )}
                         onClick={() => scrollToSection('about')}
                     >
                         <UserIcon size={isCollapsed ? 20 : 16} />
-                         <span className={cn(
-                             "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
-                             isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
-                         )}>
-                                {"About"}
-                         </span>
+                        <span className={cn(
+                            "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
+                            isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
+                        )}>
+                            {"About"}
+                        </span>
+                        {activeSection === 'about' && !isCollapsed && (
+                            <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
+                        )}
                     </button>
-                    
+
                     <button
                         key="Projects"
                         className={cn(
                             "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
-                            isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start"
+                            isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
+                            activeSection === 'projectFilter' ? "bg-primary/20 text-primary" : ""
                         )}
                         onClick={() => scrollToSection('projects')}
                     >
                         <ListFilterIcon size={isCollapsed ? 20 : 16} />
-                         <span className={cn(
-                             "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
-                             isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
-                         )}>
-                                {"Projects"}
-                         </span>
+                        <span className={cn(
+                            "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
+                            isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
+                        )}>
+                            {"Projects"}
+                        </span>
+                        {activeSection === 'projectFilter' && !isCollapsed && (
+                            <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
+                        )}
                     </button>
+                    
                     {projects.map((project) => (
                         <button
                             key={project.id}
                             className={cn(
                                 "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
                                 expandedProjects.includes(project.id) ? "bg-primary/20 text-primary" : "hover:bg-sidebar-accent",
-                                isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start"
+                                isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
+                                activeProjectId === project.id ? "bg-primary/20 text-primary" : ""
                             )}
                             onClick={() => scrollToProject(project.id)}
                             title={isCollapsed ? project.title : undefined}
@@ -134,6 +178,9 @@ export function ProjectNavigation({
                             )}>
                                 {project.title}
                             </span>
+                            {activeProjectId === project.id && !isCollapsed && (
+                                <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
+                            )}
                         </button>
                     ))}
                 </div>
