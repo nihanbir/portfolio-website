@@ -156,7 +156,7 @@ export function ProjectNavigation({
                             <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
                         )}
                     </button>
-                    
+                    <div className={"border-b border-b-game-accent"}></div>
                     {projects.map((project) => (
                         <button
                             key={project.id}
