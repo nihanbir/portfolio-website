@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Project } from '@/data/index.ts';
-import Index from '@/pages/Index.tsx'
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, Monitor, UserIcon, ListFilterIcon } from 'lucide-react';
 
@@ -104,40 +103,39 @@ export function ProjectNavigation({
                     )}>
                         Navigation
                     </h3>
-                    {isMobile && (
-                        <button
-                            onClick={() => setIsCollapsed(!isCollapsed)}
-                            className="p-1 rounded hover:bg-sidebar-accent transition-colors"
-                            aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
-                        >
-                            {isCollapsed ? <ChevronRight className="text-sidebar-foreground"/> :
-                                <ChevronLeft className="text-sidebar-foreground"/>}
-                        </button>
-                    )}
+                    <button
+                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        className="p-1 rounded hover:bg-sidebar-accent transition-colors"
+                        aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
+                    >
+                        {isCollapsed ? <ChevronRight className="text-sidebar-foreground"/> :
+                            <ChevronLeft className="text-sidebar-foreground"/>}
+                    </button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto py-2">
-                    <button
-                        key="About"
-                        className={cn(
-                            "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
-                            isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
-                            activeSection === 'about' ? "bg-primary/20 text-primary" : ""
-                        )}
-                        onClick={() => scrollToSection('about')}
-                    >
-                        <UserIcon size={isCollapsed ? 20 : 16} />
-                        <span className={cn(
-                            "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
-                            isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
-                        )}>
-                            {"About"}
-                        </span>
-                        {activeSection === 'about' && !isCollapsed && (
-                            <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
-                        )}
-                    </button>
-
+                    <div className="border-border">
+                        <button
+                            key="About"
+                            className={cn(
+                                "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
+                                isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
+                                activeSection === 'about' ? "bg-primary/20 text-primary" : ""
+                            )}
+                            onClick={() => scrollToSection('about')}
+                        >
+                            <UserIcon size={isCollapsed ? 20 : 16} />
+                            <span className={cn(
+                                "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
+                                isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
+                            )}>
+                                {"About"}
+                            </span>
+                            {activeSection === 'about' && !isCollapsed && (
+                                <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
+                            )}
+                        </button>
+                    </div>
                     <button
                         key="Projects"
                         className={cn(
@@ -164,9 +162,13 @@ export function ProjectNavigation({
                             key={project.id}
                             className={cn(
                                 "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
-                                expandedProjects.includes(project.id) ? "bg-primary/20 text-primary" : "hover:bg-sidebar-accent",
                                 isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
-                                activeProjectId === project.id ? "bg-primary/20 text-primary" : ""
+                                activeProjectId === project.id && expandedProjects.includes(project.id)
+                                    ? "bg-primary/20 text-primary"
+                                    : expandedProjects.includes(project.id)
+                                        ? "bg-accent/10 text-accent"
+                                        : "hover:bg-sidebar-accent",
+                                
                             )}
                             onClick={() => scrollToProject(project.id)}
                             title={isCollapsed ? project.title : undefined}
@@ -178,7 +180,7 @@ export function ProjectNavigation({
                             )}>
                                 {project.title}
                             </span>
-                            {activeProjectId === project.id && !isCollapsed && (
+                            {activeProjectId === project.id && expandedProjects.includes(project.id) && !isCollapsed && (
                                 <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
                             )}
                         </button>
