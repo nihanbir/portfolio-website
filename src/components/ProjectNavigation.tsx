@@ -166,7 +166,7 @@ export function ProjectNavigation({
                                 activeProjectId === project.id && expandedProjects.includes(project.id)
                                     ? "bg-primary/20 text-primary"
                                     : expandedProjects.includes(project.id)
-                                        ? "bg-accent/10 text-accent"
+                                        ? "bg-accent/5 text-accent"
                                         : "hover:bg-sidebar-accent",
                                 
                             )}
