@@ -2,9 +2,6 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import profileImage from "@/media/about/me.jpg";
 import { projects, getAllTechnologies } from '@/data/projects';
-import {cn} from "@/lib/utils.ts";
-
-
 
 const allTechnologies = getAllTechnologies();
 const About = () => {
