@@ -9,7 +9,7 @@ import {cn} from "@/lib/utils.ts";
 const allTechnologies = getAllTechnologies();
 const About = () => {
   return (
-    <section id="about" className="py-20 container mx-auto px-6">
+    <section id="about" className="pt-20 container mx-auto px-6">
       <h2 className="text-3xl font-bold mb-8 text-primary">About Me</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
