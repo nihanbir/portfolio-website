@@ -62,24 +62,24 @@
   .code-highlight {
     @apply bg-muted rounded p-4 overflow-x-auto text-sm;
   }
+  .project-card-expanded {
+    @apply max-h-[2000px] transition-all duration-500 ease-in-out overflow-hidden;
+  }
+  
+  .project-card-collapsed {
+    @apply max-h-[150px] transition-all duration-500 ease-in-out overflow-hidden;
+  }
+  
+  .tech-tag {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mr-2 mb-2 transition-all duration-300;
+  }
+  
+  .tech-tag-active {
+    @apply bg-primary text-white;
+  }
+  
+  .tech-tag-inactive {
+    @apply bg-muted text-muted-foreground hover:bg-muted/80;
+  }
 }
 
-.project-card-expanded {
-  @apply max-h-[2000px] transition-all duration-500 ease-in-out overflow-hidden;
-}
-
-.project-card-collapsed {
-  @apply max-h-[150px] transition-all duration-500 ease-in-out overflow-hidden;
-}
-
-.tech-tag {
-  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mr-2 mb-2 transition-all duration-300;
-}
-
-.tech-tag-active {
-  @apply bg-primary text-white;
-}
-
-.tech-tag-inactive {
-  @apply bg-muted text-muted-foreground hover:bg-muted/80;
-}
