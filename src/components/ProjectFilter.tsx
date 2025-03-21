@@ -44,7 +44,7 @@ export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: P
                         className={cn(
                             "px-3 py-1 rounded-full text-sm font-medium transition-colors",
                             localSelectedTechs.includes(tech)
-                                ? "bg-primary text-primary-foreground"
+                                ? "bg-accent text-accent-foreground"
                                 : "bg-muted text-muted-foreground hover:bg-muted/80"
                         )}
                         aria-pressed={localSelectedTechs.includes(tech)}
