@@ -69,8 +69,6 @@ export function ProjectNavigation({
 
     const scrollToProject = (projectId: string) => {
         onProjectSelect(projectId);
-        setActiveProjectId(projectId);
-        setActiveSection(null);
 
         // Allow time for state to update and render
         setTimeout(() => {
@@ -89,8 +87,6 @@ export function ProjectNavigation({
     };
 
     const scrollToSection = (sectionId: string) => {
-        setActiveSection(sectionId);
-        setActiveProjectId(null);
 
         const element = document.getElementById(sectionId);
         if (element) {
