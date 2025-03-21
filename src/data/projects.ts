@@ -40,7 +40,7 @@ export const projects: Project[] = [
             main: 'https://impro.usercontent.one/appid/oneComWsb/domain/ballisticpork.se/media/ballisticpork.se/onewebmedia/banner_clovenblade_hamlet_01.png?etag=W%2F%22745ba-678b87d4%22&sourceContentType=image%2Fpng&ignoreAspectRatio&resize=1178%2B578',
             gallery: [            ],
         },
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        // videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     },
     {
         id: "2",
