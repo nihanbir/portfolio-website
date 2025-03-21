@@ -46,7 +46,7 @@ export function ProjectNavigation({
                 if (element) {
                     const { offsetTop, offsetHeight } = element;
                     const sectionBottom = offsetTop + offsetHeight;
-                    const buffer = 150; // Adjust this value as needed
+                    const buffer = 100; // Adjust this value as needed
 
                     // Check if the scroll position is within the section bounds, including the buffer
                     if (scrollPosition >= offsetTop - buffer && scrollPosition < sectionBottom - buffer) {
@@ -125,7 +125,7 @@ export function ProjectNavigation({
                             className={cn(
                                 "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
                                 isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
-                                activeSection === 'about' ? "bg-primary/20 text-primary" : ""
+                                activeSection === 'about' ? "bg-primary/20 text-primary border-primary" : ""
                             )}
                             onClick={() => scrollToSection('about')}
                         >
@@ -146,7 +146,7 @@ export function ProjectNavigation({
                         className={cn(
                             "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
                             isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
-                            activeSection === 'projectFilter' ? "bg-primary/20 text-primary" : ""
+                            activeSection === 'projectFilter' ? "bg-primary/20 text-primary border-primary" : ""
                         )}
                         onClick={() => scrollToSection('projects')}
                     >
@@ -171,9 +171,9 @@ export function ProjectNavigation({
                                 "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
                                 isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
                                 activeProjectId === project.id && expandedProjects.includes(project.id)
-                                    ? "bg-primary/20 text-primary"
+                                    ? "bg-primary/20 text-primary border-primary"
                                     : expandedProjects.includes(project.id)
-                                        ? "bg-accent/5 text-accent"
+                                        ? "bg-accent/5 text-accent border-accent/20"
                                         : "hover:bg-sidebar-accent",
                                 
                             )}
