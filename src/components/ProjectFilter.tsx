@@ -33,7 +33,7 @@ export function ProjectFilter({ technologies, selectedTechs, onFilterChange }: P
     };
 
     return (
-        <div className="mb-8">
+        <div className="mb-8 pt-32">
             <h2 className="text-3xl font-bold mb-8 text-primary">Projects</h2>
             <h3 className="text-xl font-semibold mb-4">Filter by Technologies</h3>
             <div className="flex flex-wrap gap-2">
