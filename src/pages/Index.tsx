@@ -94,8 +94,7 @@ const Index = () => {
                     <section id="projects" className="py-12">
                         <div className="flex-1 px-4 md:px-8">
                             <div className="mb-8">
-                                <section id="projectFilter" className="py-12">
-                                
+                                <section id="projectFilter">
                                     <ProjectFilter
                                         technologies={allTechnologies}
                                         selectedTechs={selectedTechs}
@@ -103,7 +102,6 @@ const Index = () => {
                                     />
                                 </section>
                             </div>
-
                             <div className="space-y-8">
                             {filteredProjects.length > 0 ? (
                                     filteredProjects.map((project) => (
