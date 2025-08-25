@@ -29,7 +29,7 @@ const Header = () => {
     >
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold mr-4 text-primary">Nihan Bir</h1>
+          <h1 className="text-2xl font-bold mr-4 text-primary">Nihan Flärd</h1>
           <span className="hidden md:inline-block text-muted-foreground">Game Programmer</span>
         </div>
 
@@ -43,7 +43,7 @@ const Header = () => {
               <a href="https://github.com/nihanbir" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-primary transition-colors">
                 <FaGithub size={20} />
               </a>
-              <a href="https://www.linkedin.com/in/nihanbir/" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-primary transition-colors">
+              <a href="https://www.linkedin.com/in/nihanflard/" target="_blank" rel="noopener noreferrer" className="p-2 hover:text-primary transition-colors">
                 <FaLinkedin size={20} />
               </a>
             </div>

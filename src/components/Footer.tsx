@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <p className="text-muted-foreground">&copy; {currentYear} Nihan Bir. All rights reserved.</p>
+            <p className="text-muted-foreground">&copy; {currentYear} Nihan Flärd. All rights reserved.</p>
           </div>
           
           <div className="flex space-x-4">
@@ -25,7 +25,7 @@ const Footer = () => {
               <FaGithub size={20} />
             </a>
             <a 
-              href="https://www.linkedin.com/in/nihanbir/" 
+              href="https://www.linkedin.com/in/nihanflard/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"

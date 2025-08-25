@@ -13,13 +13,13 @@ const About = () => {
         {/* Profile Card */}
         <Card className="bg-card/50 backdrop-blur-sm md:col-span-1">
           <CardHeader>
-            <CardTitle className="text-xl">Nihan Bir</CardTitle>
+            <CardTitle className="text-xl">Nihan Flärd</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
             <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-primary/30 shadow-lg mb-4">
               <img
                   src={profileImage}
-                  alt="Nihan Bir"
+                  alt="Nihan Flärd"
                   className="w-full h-full object-cover"
               />
             </div>
