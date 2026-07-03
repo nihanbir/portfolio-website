@@ -638,22 +638,71 @@ int main(int argc, char* args[])
     {
         id: "6",
         title: "sk8escape",
-        technologies: ["Unity", "C#", "Jira", "Github", "Firebase", "Google Play Console"],
-        shortDescription: "This is a mobile game for Android, unfortunately it's not available to download anymore",
+        technologies: ["Unity", "C#", "Firebase", "Jira", "GitHub", "Google Play Console"],
+        shortDescription: "Backend architecture for a Unity mobile game using Firebase, cloud saves, authentication, analytics, and Google Play integration.",
         role: ["Backend"],
         teamSize: "17 people",
         duration: "4 weeks",
-        fullDescription:
-            "This was my only backend experience—I single-handedly implemented the entire backend, and it was challenging yet quite fun. " +
-            "I was also all over the project to fix bugs and review code.\n"+
-            "Responsibilities:\n" +
-            "• Implementation of the backend using Firebase, including analytics, online data storage, and authentication via Google Play Games.\n" +
-            "• Structuring the project by creating UML and TDD.\n" +
-            "• Working on solving issues from different departments.\n" +
-            "• Bug fixing for various departments.\n" +
-            "• Reviewing code.\n" +
-            "• Assistance with publishing the game using Google Play Console.\n" +
-            "• UI regarding backend.\n",
+        overview: "For sk8escape, a Unity mobile game, I independently implemented the project's backend architecture in C#. My work covered Firebase and Google Play authentication, local and cloud persistence, save conflict resolution, analytics, offline handling, and the UI states connecting those services to the game flow.",
+        keyTakeaways: [
+            "Backend Development",
+            "Firebase",
+            "Cloud Saves",
+            "Authentication",
+            "Unity"
+        ],
+        systemsImplemented: [
+            "Firebase authentication",
+            "Google Play Games authentication",
+            "Anonymous authentication fallback",
+            "Cloud save system",
+            "Local save system",
+            "Automatic save conflict resolution",
+            "Firebase analytics integration",
+            "Backend UI integration",
+            "Google Play Console publishing support"
+        ],
+        technicalHighlights: [
+            {
+                title: "Authentication System",
+                description: "Implemented user authentication using Google Play Games with automatic fallback to anonymous Firebase authentication when Google authentication was unavailable."
+            },
+            {
+                title: "Cloud Save Architecture",
+                description: "Designed and implemented a save system capable of loading data from both local storage and Firebase while automatically selecting the most recent save using timestamps."
+            },
+            {
+                title: "Offline Support",
+                description: "Implemented graceful offline behaviour that allowed the game to continue functioning when online services were unavailable, ensuring players could continue playing using local save data."
+            },
+            {
+                title: "Asynchronous Backend Workflow",
+                description: "Implemented asynchronous communication with Firebase for authentication and save retrieval while coordinating loading states within the user interface."
+            },
+            {
+                title: "Backend Integration",
+                description: "Integrated backend systems with the game's UI, analytics, and gameplay flow while keeping backend responsibilities separated from gameplay systems."
+            }
+        ],
+        technicalChallenges: [
+            {
+                challenge: "Synchronizing local and cloud save data",
+                solution: "Implemented timestamp-based conflict resolution that automatically selected the newest available save regardless of whether it originated from local storage or Firebase.",
+                result: "Players could seamlessly continue playing across sessions without manually choosing which save data to use."
+            },
+            {
+                challenge: "Handling authentication failures",
+                solution: "Designed a fallback authentication flow that automatically switched to anonymous Firebase accounts whenever Google Play authentication was unavailable.",
+                result: "The game remained usable even when external authentication services failed."
+            }
+        ],
+        additionalResponsibilities: [
+            "Implemented the entire backend architecture independently.",
+            "Reviewed code and fixed issues across multiple departments.",
+            "Created and maintained UML and TDD documentation.",
+            "Provided backend-related UI implementation.",
+            "Assisted with publishing through Google Play Console."
+        ],
 
         images: {
             main: 'https://github.com/nihanbir/portfolio-website/blob/main/src/media/projects/sk8escape/229985_328099.png?raw=true',
