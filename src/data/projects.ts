@@ -203,43 +203,65 @@ export const projects: Project[] = [
     {
         id: "3",
         title: "Algorithms & Data Structures",
-        technologies: ["Unity", "C#", "C++", "Github"],
-        shortDescription: "The key feature of this project is the implementation of a modified BFS algorithm in Unity using C#.",
+        technologies: ["Unity", "C#", "C++", "GitHub"],
+        shortDescription: "A pathfinding and algorithms project featuring a modified BFS solution for weighted grid traversal with changing constraints.",
         role: ["Gameplay Programmer"],
-        fullDescription:
-        
-            "In addition to the pathfinding game, this repository features;\n" +
-            "• My first experience with C++ 😊\n" +
-            "• A TicTacToe game developed in C++\n" +
-            "• Exercises and my learning journey in Algorithms & Data Structures\n" +
-            "✨ The key feature of this project is the implementation of a modified BFS algorithm. " +
-            "You can find details on the problem it addresses and its solution below. ✨\n" +
-            
-            "Problem: \n"+
-            "In a grid of size NxM, there are K obstacles placed randomly. Each obstacle has a weight associated with it, " +
-            "which is a positive integer. The task is to find the path from the bottom-right corner to top-left corner that passes " +
-            "through the obstacles with the minimum total weight.\n" +
-            "However, there is a catch - when the player pass through an obstacle, its weight is added to a running sum. If the running " +
-            "sum becomes greater than a threshold value T, the player is teleported back to the bottom-right corner, and must start over.\n" +
-            "To make the problem more interesting, the teleportation threshold T is not constant - it changes every time you get teleported. " +
-            "Specifically, after being teleported, the new threshold value is set to be the sum of the weights of the obstacles the player passed " +
-            "through on their previous attempt, multiplied by a constant C. At the start, T is always smaller than the sum of weights of the smallest " +
-            "weight path to enforce at least one teleportation.\n" +
-            
-            "The goal: \n"+
-            "The goal is to find the path that minimizes the sum of the weights of the obstacles the player passes through, while taking into " +
-            "account the random placement of the obstacles and the changing teleportation threshold. When the goal can't be reached with the " +
-            "smallest weight path, the optimal thing for the player to do, would be to expand T maximally by taking the biggest weight path. " +
-            "To solve the problem of finding the biggest weight path, a case which swaps the objective of the algorithm can be added.\n"+
-            
-            "How I solved it:\n"+
-            "Initially thought algorithm was Dijkstra however it didn't solve the problem of collecting the heighest " +
-            "weight when there was no path to the goal.\n" +
-            "A modified version of BFS algorithm was used to solve this problem. " +
-            "BFS stores copies of all paths (when predecessor method isn't used), " +
-            "therefore this seemed like the best option because all paths needed to be compared " +
-            "to each other to know which one reached the highest weight when the goal wasn't reachable.\n" +
-            "Modified BFS was made to take weight into account and to look at all ways to get to any given tile, not just the fastest.",
+        overview: "This project explores algorithms and data structures through a Unity pathfinding challenge and smaller C++ exercises. The main challenge was finding a route through a weighted grid whose traversal threshold changes between attempts: the search must minimize cost when the goal is reachable, but select the highest-cost reachable fallback when it is not.",
+        keyTakeaways: [
+            "Algorithm Design",
+            "Modified BFS",
+            "Pathfinding",
+            "C#",
+            "C++ Practice"
+        ],
+        systemsImplemented: [
+            "Modified BFS pathfinding algorithm",
+            "Weighted grid traversal",
+            "State-based path representation",
+            "Path cost evaluation",
+            "Fallback path selection when the goal is unreachable",
+            "TicTacToe game in C++",
+            "Algorithms and data structures exercises"
+        ],
+        technicalHighlights: [
+            {
+                title: "Modified BFS Pathfinding",
+                description: "Implemented a modified Breadth-First Search algorithm that evaluates weighted paths through a grid while tracking accumulated cost and changing traversal constraints."
+            },
+            {
+                title: "State-based Path Representation",
+                description: "Represented each path as a sequence of states with its own visited-state collection and total cost, allowing multiple possible routes to the same tile to be evaluated instead of only keeping the first discovered path."
+            },
+            {
+                title: "Dynamic Objective Handling",
+                description: "Handled cases where the goal could not be reached under the current threshold by selecting the highest-cost reachable path to expand the next attempt's threshold, rather than simply failing the search."
+            },
+            {
+                title: "Algorithm Tradeoffs",
+                description: "Used path copying to preserve full route information for comparison, accepting higher memory usage in exchange for simpler path evaluation and support for the project's changing objective."
+            },
+            {
+                title: "C++ Fundamentals",
+                description: "Practiced C++ through smaller exercises including a TicTacToe implementation while building foundational understanding of algorithms and data structures."
+            }
+        ],
+        technicalChallenges: [
+            {
+                challenge: "Standard shortest-path assumptions did not fit the problem",
+                solution: "Dijkstra-style thinking was not enough because the algorithm sometimes needed to maximize path cost when the goal could not be reached, then minimize cost once the threshold allowed completion.",
+                result: "A modified BFS approach allowed the search to evaluate multiple routes and switch behaviour depending on whether the goal was reachable."
+            },
+            {
+                challenge: "Comparing complete candidate paths",
+                solution: "Stored full path copies with visited states and total cost so paths could be compared directly when deciding whether to return a successful route or the highest-cost fallback route.",
+                result: "The algorithm could evaluate both successful and failed attempts while preserving enough information to choose an appropriate path."
+            }
+        ],
+        additionalResponsibilities: [
+            "Documented the problem, attempted approaches, and final solution.",
+            "Included code snippets to demonstrate the data structures and search implementation.",
+            "Used the project to build confidence with both C# algorithm implementation and C++ fundamentals."
+        ],
 
         images: {
             main:'https://github.com/nihanbir/portfolio-website/blob/main/src/media/projects/algorithms/991542_265422.png?raw=true',
