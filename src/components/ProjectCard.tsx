@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, ChevronUp, Link, Calendar, Users, Monitor, Play } from 'lucide-react';
+import { ChevronDown, ChevronUp, Link, Calendar, Users, Monitor, Play, Circle } from 'lucide-react';
 import { FaGithub } from "react-icons/fa";
 import { cn } from '@/lib/utils';
 import { Button } from "@/components/ui/button.tsx";
@@ -50,6 +50,16 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                 <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4" onClick={handleToggle}>
                     <div className="flex flex-col space-y-2 flex-grow">
                         <h2 className="text-xl sm:text-2xl font-bold text-primary">{project.title}</h2>
+                        {project.featured && (
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm">
+                                <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-400">
+                                    <Circle className="h-2.5 w-2.5 fill-current" aria-hidden="true" />
+                                    {project.status}
+                                </span>
+                                <span className="text-foreground/80">{project.projectType}</span>
+                                <span className="text-muted-foreground">{project.releasePlan}</span>
+                            </div>
+                        )}
                         <div className="flex-wrap">
                             {project.technologies.map((tech) => (
                                 <span key={tech} className="tech-tag text-xs sm:text-sm border border-accent/50">
@@ -59,7 +69,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                         </div>
                     </div>
 
-                    {!isExpanded && (
+                    {!isExpanded && project.images && (
                         <MiniImageGallery
                             images={project.images.gallery}
                             mainImage={project.images.main}
@@ -85,13 +95,15 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                         transition: 'max-height 0.5s ease, opacity 0.3s ease'
                     }}
                 >
-                    <div className="pt-4 space-y-6">
-                        <ImageGallery
-                            images={project.images.gallery}
-                            mainImage={project.images.main}
-                            projectTitle={project.title}
-                        />
-                    </div>
+                    {project.images && (
+                        <div className="pt-4 space-y-6">
+                            <ImageGallery
+                                images={project.images.gallery}
+                                mainImage={project.images.main}
+                                projectTitle={project.title}
+                            />
+                        </div>
+                    )}
 
                     <ProjectContent project={project} />
 

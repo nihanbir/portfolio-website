@@ -25,11 +25,11 @@ export function ProjectContent({ project }: ProjectContentProps) {
                     <h3 id={`takeaways-${project.id}`} className="sr-only">
                         Key Takeaways
                     </h3>
-                    <ul className="flex flex-wrap gap-2" aria-label="Key takeaways">
+                    <ul className={project.featured ? "flex flex-wrap gap-2 rounded-xl border border-primary/30 bg-gradient-to-r from-primary/15 to-accent/5 p-4" : "flex flex-wrap gap-2"} aria-label="Key takeaways">
                         {project.keyTakeaways.map((takeaway) => (
                             <li
                                 key={takeaway}
-                                className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-foreground sm:text-sm"
+                                className="rounded-full border border-primary/50 bg-background/70 px-3 py-1.5 text-xs font-semibold text-foreground sm:text-sm"
                             >
                                 {takeaway}
                             </li>
@@ -69,6 +69,29 @@ export function ProjectContent({ project }: ProjectContentProps) {
                             </article>
                         ))}
                     </div>
+                </section>
+            )}
+
+            {project.architectureFlow && project.architectureFlow.length > 0 && (
+                <section aria-labelledby={`architecture-${project.id}`}>
+                    <h3 id={`architecture-${project.id}`} className="text-lg sm:text-xl font-semibold mb-3">
+                        Architecture Flow
+                    </h3>
+                    <p className="mb-4 max-w-3xl text-sm leading-relaxed text-foreground/70 sm:text-base">
+                        A single command path carries human or AI intent through authoritative validation, durable state, replication, and acknowledgement-gated presentation.
+                    </p>
+                    <ol className="mx-auto grid max-w-3xl grid-cols-1 rounded-xl border border-primary/30 bg-gradient-to-b from-primary/10 to-muted/10 p-4 sm:p-6" aria-label="Architecture flow">
+                        {project.architectureFlow.map((step, index) => (
+                            <React.Fragment key={step}>
+                                <li className={`rounded-md border px-3 py-2 text-center text-xs font-medium sm:text-sm ${index === 0 || index === project.architectureFlow!.length - 1 ? "border-primary/60 bg-primary/15 text-foreground" : "border-border bg-background/70 text-foreground/90"}`}>
+                                    {step}
+                                </li>
+                                {index < project.architectureFlow!.length - 1 && (
+                                    <li aria-hidden="true" className="py-0.5 text-center text-primary">↓</li>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </ol>
                 </section>
             )}
 

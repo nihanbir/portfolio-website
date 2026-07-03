@@ -10,6 +10,7 @@ export interface Project {
                 title: string;
                 description: string;
         }[];
+        architectureFlow?: string[];
         technicalChallenges?: {
                 challenge: string;
                 solution: string;
@@ -18,7 +19,11 @@ export interface Project {
         additionalResponsibilities?: string[];
         lessonsLearned?: string[];
         role: string[];
-        images: {
+        featured?: boolean;
+        projectType?: string;
+        status?: string;
+        releasePlan?: string;
+        images?: {
                 main: string;
                 gallery: string[];
         };

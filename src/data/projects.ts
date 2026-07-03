@@ -3,6 +3,132 @@ import { Project } from "@/data/index.ts";
 // Project data
 export const projects: Project[] = [
     {
+        id: "7",
+        title: "Campaign2028",
+        featured: true,
+        projectType: "Commercial Client Project",
+        status: "In Development",
+        releasePlan: "Planned for App Store release",
+        platform: "iOS",
+        teamSize: "Solo Developer",
+        technologies: ["Unity", "C#", "FishNet", "Unity Relay", "Unity Gaming Services", "GitHub"],
+        shortDescription: "Commercial Unity strategy game engineered around server-authoritative multiplayer, event-driven systems, AI, code generation, and developer tooling.",
+        role: ["Solo Developer", "Gameplay & Systems Programmer"],
+        overview: "Campaign2028 is a commercial client project that translates a client-authored strategy game into a production-oriented Unity application. Working as the solo developer, I architected and implemented the gameplay framework, server-authoritative multiplayer, AI, UI architecture, data pipelines, tooling, assets, and overall technical foundation. The client owns the gameplay rules, mechanics, cards, balancing, and creative direction; my role is their end-to-end technical implementation.",
+        keyTakeaways: [
+            "Solo Development",
+            "Server-authoritative Multiplayer",
+            "Custom Lobby",
+            "Event-driven Architecture",
+            "AI Systems",
+            "Developer Tooling"
+        ],
+        systemsImplemented: [
+            "Server-authoritative gameplay framework and phase managers",
+            "Phase-based game flow for setup, main gameplay, civil war, and game over",
+            "Turn sequencing, dice-roll validation, actor assignment, card ownership, and victory evaluation",
+            "Event-card resolution system with multiple event variants and multi-step interactions",
+            "Coalition system including invitations, membership, merging, transfers, betrayal, and shared victory",
+            "Civil war subsystem including initiative, sides, defender selection, stat rolls, attacks, eliminations, and victory",
+            "FishNet snapshot and delta replication with reconnect support and targeted state delivery",
+            "Custom multiplayer lobby with Unity Relay hosting and join-code flow",
+            "Local AI participants using the same authoritative command pathways as human players",
+            "AI decision logic for setup, event responses, main turns, coalition evaluation, and betrayal decisions",
+            "Client-side ordered event queue with UI acknowledgements before advancing state presentation",
+            "ScriptableObject-based data definitions for actors, states, institutions, allegiances, decks, events, and animations",
+            "Reusable UI visual-state and DOTween animation framework",
+            "Attribute-driven payload generation and serialization tooling",
+            "Editor tooling for signal debugging, payload validation, custom inspectors, and runtime testing helpers"
+        ],
+        technicalHighlights: [
+            {
+                title: "Server-authoritative Multiplayer Architecture",
+                description: "Built a server-authoritative gameplay architecture where UI and AI submit commands, authoritative phase managers validate intent, and accepted outcomes are committed as semantic gameplay events before being replicated to clients."
+            },
+            {
+                title: "Event-driven Gameplay Architecture",
+                description: "Implemented typed gameplay and UI event buses to decouple domain logic, networking, AI, and presentation while keeping rule evaluation centralized and deterministic."
+            },
+            {
+                title: "Acknowledgement-gated UI Event Sequencing",
+                description: "Built a client-side ordered event queue that dispatches one network event at a time and waits for UI acknowledgement before consuming the next event, preventing network state updates from racing ahead of animations and presentation logic."
+            },
+            {
+                title: "Snapshot and Delta Replication",
+                description: "Implemented durable authoritative gameplay-state slots with monotonic event IDs, allowing the server to send deltas during normal play and reconstruct full client state through snapshots for ready or reconnecting clients."
+            },
+            {
+                title: "Attribute-driven Payload Code Generation",
+                description: "Created an editor generator that uses payload attributes to produce builders, compact writers, safe client views, schema tables, and dispatch registry code, reducing repetitive serialization work while preserving strongly typed authoring."
+            },
+            {
+                title: "Shared Human and AI Command Pathways",
+                description: "Designed AI players to emit the same command types as human UI input, ensuring AI decisions passed through the same authoritative validation path and reducing the risk of rule divergence."
+            },
+            {
+                title: "Phase-based Rule State Machines",
+                description: "Separated setup, main gameplay, civil war, and game-over logic into phase-specific managers with explicit stage transitions, keeping a complex rules-heavy strategy game from collapsing into a single monolithic controller."
+            },
+            {
+                title: "Developer Tooling",
+                description: "Built tooling including a signal debugger, payload schema validation, generated-file cleanup, custom inspectors, runtime test helpers, and session-reset utilities to make the architecture easier to debug and maintain."
+            }
+        ],
+        architectureFlow: [
+            "UI / AI Intent",
+            "IUICommand",
+            "Networking / command bridge",
+            "Authoritative Phase Manager",
+            "Validated State Mutation",
+            "Semantic Gameplay Event",
+            "Generated Payload",
+            "Gameplay State Slot",
+            "FishNet Replication",
+            "Client Event Router",
+            "Phase UI",
+            "UI Acknowledgement"
+        ],
+        technicalChallenges: [
+            {
+                challenge: "Keeping multiplayer UI synchronized with network state",
+                solution: "Implemented ordered client-side event buffering with one in-flight event at a time and explicit acknowledgement from UI handlers before the next event could be consumed.",
+                result: "Network events could arrive quickly while UI animations and presentation logic still played in a safe, deterministic order."
+            },
+            {
+                challenge: "Reconstructing state for ready or reconnecting clients",
+                solution: "Implemented durable server-side state slots keyed by event type, stage, and subject, then used snapshot RPCs to replay the latest authoritative state and signal snapshot completion.",
+                result: "Clients did not need to observe every historical RPC to reconstruct a usable game state."
+            },
+            {
+                challenge: "Avoiding duplicated and fragile networking payload code",
+                solution: "Built an attribute-driven code generation pipeline for payload builders, compact writers, schemas, views, and dispatch registration.",
+                result: "Serialization and dispatch infrastructure became more consistent, type-safe, and easier to extend."
+            },
+            {
+                challenge: "Sharing rules between human and AI players",
+                solution: "Separated decision-making from command execution so AI produced the same command objects as the UI, with authoritative phase managers validating both.",
+                result: "Human and AI players followed the same game rules without AI-only shortcuts or duplicated rule logic."
+            }
+        ],
+        additionalResponsibilities: [
+            "Own the full technical implementation as solo developer: architecture, gameplay systems, networking, AI, UI, tooling, data setup, and assets.",
+            "Translate the client's gameplay rules, mechanics, cards, balancing, and creative direction into maintainable technical systems.",
+            "Structured the project into separate assemblies for Core, UI commands, Gameplay, Networking, AI, and UI.",
+            "Created ScriptableObject-based authoring workflows for gameplay data, cards, decks, event conditions, visual states, and animations.",
+            "Implemented Unity Relay hosting, join-code flow, anonymous authentication, and session teardown handling.",
+            "Built editor tools and internal debugging utilities to make complex event and networking flows observable.",
+            "Created and maintained internal architecture documentation."
+        ],
+        codeSnippets: [
+            { title: "GameplayManager", language: "csharp", code: `// Authoritative coordinator: validates intent before state changes.\n[Server]\npublic void Execute(IUICommand command)\n{\n    if (!CurrentPhase.CanExecute(command)) return;\n\n    var gameplayEvent = CurrentPhase.Apply(command, State);\n    StateBridge.Commit(gameplayEvent);\n}` },
+            { title: "GameplayStateBridge", language: "csharp", code: `// Stores durable state, then publishes the generated network payload.\npublic void Commit(IGameplayEvent gameplayEvent)\n{\n    var payload = PayloadGenerator.Create(gameplayEvent);\n    StateSlots.Apply(payload);\n    Replication.BroadcastDelta(payload);\n}` },
+            { title: "ClientGameplayStateRouter", language: "csharp", code: `// Preserves presentation order while asynchronous UI sequences complete.\nprivate async UniTask ProcessAsync()\n{\n    while (_events.TryDequeue(out var next))\n    {\n        await _phaseUI.Dispatch(next);\n        Acknowledge(next.EventId);\n    }\n}` },
+            { title: "PayloadGenerator", language: "csharp", code: `[GameplayPayload(typeof(CoalitionChangedEvent))]\npublic partial struct CoalitionChangedPayload { }\n\n// Generated: builder, writer, client view, schema and dispatch entry.\nvar payload = CoalitionChangedPayloadBuilder.From(gameplayEvent);` },
+            { title: "LobbyManager", language: "csharp", code: `public async Task<string> HostAsync(int playerLimit)\n{\n    var allocation = await RelayService.CreateAllocationAsync(playerLimit);\n    var joinCode = await RelayService.GetJoinCodeAsync(allocation.Id);\n    StartFishNetHost(allocation);\n    return joinCode;\n}` },
+            { title: "AICoalitionBrain", language: "csharp", code: `// AI and human input share the same authoritative command boundary.\npublic IUICommand ChooseResponse(CoalitionOffer offer)\n{\n    var accept = EvaluateUtility(offer) >= _acceptanceThreshold;\n    return new RespondToCoalitionCommand(PlayerId, offer.Id, accept);\n}` }
+        ]
+    },
+    {
         id: "1",
         title: "Cloven Blade",
         technologies: [
