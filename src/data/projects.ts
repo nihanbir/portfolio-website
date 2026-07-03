@@ -550,25 +550,74 @@ int main(int argc, char* args[])
     {
         id: "5",
         title: "Slappy Knut",
-        technologies: ["Unity", "C#", "Trello", "Github"],
-        shortDescription: "My first unity project with a team",
+        technologies: ["Unity", "C#", "Trello", "GitHub"],
+        shortDescription: "My first team-based Unity project, where I worked on character control, combat, spells, items, project structure, and production coordination.",
         role: ["Product Owner", "Gameplay Programmer"],
         teamSize: "6 people",
         duration: "6 weeks",
-        
-        fullDescription:
-
-            "Responsibilities:\n" +
-            "• Structuring the project by creating, enforcing and updating UML and TDD\n" +
-            "• Managing trello\n" +
-            "• Implementing interfaces\n" +
-            "• Merging into main branch and solving merge issues\n" +
-            "• Reviewing code\n" +
-            "• Bug fixing\n" +
-            "• Character control\n" +
-            "• Melee attack system\n" +
-            "• Spells and spell casting\n" +
-            "• Equippable and consumable items\n",
+        overview: "Slappy Knut was my first team-based Unity project. As Gameplay Programmer, I implemented core character, combat, spell, and item functionality in C#. I also served as Product Owner, helping organize the project's technical structure and coordinate production across the team.",
+        keyTakeaways: [
+            "Unity Gameplay",
+            "C#",
+            "Combat Systems",
+            "Interfaces",
+            "Team Collaboration"
+        ],
+        systemsImplemented: [
+            "Character control",
+            "Melee attack system",
+            "Spell casting system",
+            "Equippable items",
+            "Consumable items",
+            "Gameplay interfaces",
+            "Bug fixes across gameplay systems",
+            "Project structure documentation using UML and TDD"
+        ],
+        technicalHighlights: [
+            {
+                title: "Character Control",
+                description: "Implemented player character control and core gameplay input, providing the foundation for movement and combat interactions."
+            },
+            {
+                title: "Melee Combat System",
+                description: "Implemented melee attack functionality and integrated it with the player character, supporting direct combat interactions."
+            },
+            {
+                title: "Spell Casting System",
+                description: "Implemented spell casting behaviour and connected it with the character's gameplay actions."
+            },
+            {
+                title: "Item Systems",
+                description: "Worked on equippable and consumable item functionality, allowing gameplay items to affect the player during combat and exploration."
+            },
+            {
+                title: "Interface-based Gameplay Structure",
+                description: "Implemented gameplay interfaces to keep systems more modular and easier to extend across different item, spell, and character behaviours."
+            },
+            {
+                title: "Code Review and Merge Support",
+                description: "Reviewed code, merged work into the main branch, resolved merge issues, and helped maintain a stable team codebase."
+            }
+        ],
+        technicalChallenges: [
+            {
+                challenge: "Keeping a first team project organized",
+                solution: "Created, enforced, and updated UML and TDD documentation while helping structure the project and coordinate implementation across the team.",
+                result: "The team had clearer technical direction and a more organized foundation for collaboration."
+            },
+            {
+                challenge: "Maintaining stability across shared gameplay code",
+                solution: "Handled merges into the main branch, resolved merge conflicts, reviewed code, and fixed bugs across gameplay systems.",
+                result: "The project remained more stable while multiple team members contributed to the same codebase."
+            }
+        ],
+        additionalResponsibilities: [
+            "Served as Product Owner during the project.",
+            "Managed the Trello board and production tasks.",
+            "Created, enforced, and updated UML and TDD documentation.",
+            "Reviewed code and helped resolve merge issues.",
+            "Contributed bug fixes across different parts of the project."
+        ],
 
         images: {
             main: 'https://user-images.githubusercontent.com/112477158/212632090-9adf0583-a11c-4198-88a6-4189920c985c.png',
