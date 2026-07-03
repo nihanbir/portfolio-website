@@ -38,10 +38,6 @@ const About = () => {
                 Gameplay Programmer with professional experience in Unreal Engine 5 and Unity. I enjoy building gameplay systems, 
                 multiplayer features, and tools that help create polished player experiences.
             </p>
-            <p className="text-muted-foreground mb-4">
-              Coming from a background in aviation, I'm exploring my life long dream of working
-              on developing video games. I thrive on problem-solving and working in a team.
-            </p>
 
             <h4 className="font-medium mb-3 mt-6">Skills & Technologies</h4>
               <div className="flex flex-wrap">
