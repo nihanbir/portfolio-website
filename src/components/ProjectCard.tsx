@@ -42,13 +42,25 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
         <div
             id={`project-${project.id}`}
             className={cn(
-                "project-card backdrop-blur-md bg-background/60 border border-primary/70 shadow-lg rounded-xl overflow-hidden mb-6 transition-all duration-300",
+                "project-card backdrop-blur-md bg-background/60 border shadow-lg rounded-xl overflow-hidden mb-6 transition-all duration-300",
+                project.category === "gameplay" ? "border-accent/45" : "border-primary/60",
+                project.featuredLabel && (project.category === "gameplay" ? "shadow-accent/10" : "shadow-primary/10"),
                 isExpanded && "expanded"
             )}
         >
             <div className="p-4 sm:p-6">
                 <div className="flex flex-col md:flex-row justify-between items-start mb-4 gap-4" onClick={handleToggle}>
                     <div className="flex flex-col space-y-2 flex-grow">
+                        {project.featuredLabel && (
+                            <span className={cn(
+                                "w-fit rounded-full border px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] sm:text-xs",
+                                project.category === "gameplay"
+                                    ? "border-accent/40 bg-accent/10 text-accent"
+                                    : "border-primary/40 bg-primary/10 text-primary"
+                            )}>
+                                {project.featuredLabel}
+                            </span>
+                        )}
                         <h2 className="text-xl sm:text-2xl font-bold text-primary">{project.title}</h2>
                         {project.featured && (
                             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm">

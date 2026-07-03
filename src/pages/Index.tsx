@@ -7,6 +7,32 @@ import { projects, getAllTechnologies } from '@/data/projects';
 import { Project } from '@/data';
 import Footer from '@/components/Footer';
 import About from "@/components/About.tsx";
+import { Cpu, Gamepad2 } from 'lucide-react';
+
+const projectSections = [
+    {
+        id: 'engineering',
+        title: 'Software Engineering',
+        description: 'Architecture, networking, backend systems, algorithms, and developer tooling.',
+        icon: Cpu,
+        accent: 'primary',
+        projectIds: ['7', '6', '3', '4']
+    },
+    {
+        id: 'gameplay',
+        title: 'Game Development',
+        description: 'Gameplay programming, player-facing systems, AI behaviour, and feature implementation.',
+        icon: Gamepad2,
+        accent: 'accent',
+        projectIds: ['1', '2', '5']
+    }
+] as const;
+
+const curatedProjects = projectSections.flatMap(section =>
+    section.projectIds
+        .map(projectId => projects.find(project => project.id === projectId))
+        .filter((project): project is Project => Boolean(project))
+);
 
 const Index = () => {
     const [expandedProjects, setExpandedProjects] = useState<string[]>(() => {
@@ -23,16 +49,16 @@ const Index = () => {
 
     const [activeProject, setActiveProject] = useState<string | null>(null);
     const [selectedTechs, setSelectedTechs] = useState<string[]>([]);
-    const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
+    const [filteredProjects, setFilteredProjects] = useState<Project[]>(curatedProjects);
 
     // Get all unique technologies
     const allTechnologies = getAllTechnologies();
 
     useEffect(() => {
         if (selectedTechs.length === 0) {
-            setFilteredProjects(projects);
+            setFilteredProjects(curatedProjects);
         } else {
-            const filtered = projects.filter((project) => {
+            const filtered = curatedProjects.filter((project) => {
                 // Check if project has at least one of the selected technologies
                 return project.technologies.some((tech) => selectedTechs.includes(tech));
             });
@@ -102,16 +128,41 @@ const Index = () => {
                                     />
                                 </section>
                             </div>
-                            <div className="space-y-8">
+                            <div className="space-y-12">
                             {filteredProjects.length > 0 ? (
-                                    filteredProjects.map((project) => (
-                                        <ProjectCard
-                                            key={project.id}
-                                            project={project}
-                                            isExpanded={expandedProjects.includes(project.id)}
-                                            onToggleExpand={() => handleToggleExpand(project.id)}
-                                        />
-                                    ))
+                                    projectSections.map((section) => {
+                                        const sectionProjects = filteredProjects.filter(project => project.category === section.id);
+                                        if (sectionProjects.length === 0) return null;
+
+                                        const SectionIcon = section.icon;
+                                        return (
+                                            <section id={`${section.id}-projects-section`} key={section.id} aria-labelledby={`${section.id}-projects`}>
+                                                <div className="mb-5 flex items-start gap-3 border-b border-border/70 pb-4">
+                                                    <div className={`mt-0.5 rounded-lg p-2 ${section.accent === 'primary' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`}>
+                                                        <SectionIcon className="h-5 w-5" aria-hidden="true" />
+                                                    </div>
+                                                    <div>
+                                                        <h2 id={`${section.id}-projects`} className="text-xl font-bold sm:text-2xl">
+                                                            {section.title}
+                                                        </h2>
+                                                        <p className="mt-1 max-w-2xl text-sm text-muted-foreground sm:text-base">
+                                                            {section.description}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-6">
+                                                    {sectionProjects.map((project) => (
+                                                        <ProjectCard
+                                                            key={project.id}
+                                                            project={project}
+                                                            isExpanded={expandedProjects.includes(project.id)}
+                                                            onToggleExpand={() => handleToggleExpand(project.id)}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </section>
+                                        );
+                                    })
                                 ) : (
                                     <div className="text-center py-12">
                                         <p className="text-lg text-muted-foreground">

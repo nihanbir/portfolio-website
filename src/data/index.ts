@@ -20,6 +20,8 @@ export interface Project {
         lessonsLearned?: string[];
         role: string[];
         featured?: boolean;
+        category?: "engineering" | "gameplay";
+        featuredLabel?: string;
         projectType?: string;
         status?: string;
         releasePlan?: string;

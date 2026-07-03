@@ -23,7 +23,7 @@ const About = () => {
                   className="w-full h-full object-cover"
               />
             </div>
-            <h3 className="text-lg font-semibold text-center">Game Programmer & Developer</h3>
+            <h3 className="text-lg font-semibold text-center">Gameplay &amp; Systems Programmer</h3>
             <p className="text-sm text-muted-foreground text-center mt-2">Certified Scrum Master</p>
           </CardContent>
         </Card>

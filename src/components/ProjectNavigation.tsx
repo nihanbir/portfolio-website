@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Project } from '@/data/index.ts';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, Monitor, UserIcon, ListFilterIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Monitor, UserIcon, ListFilterIcon, Cpu, Gamepad2 } from 'lucide-react';
+
+const navigationSections = [
+    { id: 'engineering', title: 'Software Engineering', icon: Cpu },
+    { id: 'gameplay', title: 'Game Development', icon: Gamepad2 }
+] as const;
 
 interface ProjectNavigationProps {
     projects: Project[];
@@ -38,7 +43,12 @@ export function ProjectNavigation({
     // Scroll event listener to update active section and project
     useEffect(() => {
         const handleScroll = () => {
-            const sections = ['about', 'projectFilter', ...projects.map(project => `project-${project.id}`)];
+            const sections = [
+                'about',
+                'projectFilter',
+                ...projects.map(project => `project-${project.id}`),
+                ...navigationSections.map(section => `${section.id}-projects-section`)
+            ];
             const scrollPosition = window.scrollY + 100; // Adjust for header height
 
             for (const section of sections) {
@@ -54,7 +64,7 @@ export function ProjectNavigation({
                             setActiveProjectId(section.replace('project-', ''));
                             setActiveSection(null);
                         } else {
-                            setActiveSection(section);
+                            setActiveSection(section.replace('-projects-section', ''));
                             setActiveProjectId(null);
                         }
                         break;
@@ -87,10 +97,10 @@ export function ProjectNavigation({
     };
 
     const scrollToSection = (sectionId: string) => {
-
         const element = document.getElementById(sectionId);
         if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+            const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset - 90;
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
         }
     };
 
@@ -164,34 +174,61 @@ export function ProjectNavigation({
                     
                     <div className={"border-b border-b-game-accent"}></div>
                     
-                    {projects.map((project) => (
-                        <button
-                            key={project.id}
-                            className={cn(
-                                "nav-button w-full flex items-center my-1 py-2 rounded-md hover:bg-sidebar-accent transition-colors project-card backdrop-blur-md bg-background/60 border border-border/55 shadow-lg overflow-hidden",
-                                isCollapsed ? "justify-center px-2" : "pl-3 pr-2 justify-start",
-                                activeProjectId === project.id && expandedProjects.includes(project.id)
-                                    ? "bg-primary/20 text-primary border-primary"
-                                    : expandedProjects.includes(project.id)
-                                        ? "bg-accent/5 text-accent border-accent/20"
-                                        : "hover:bg-sidebar-accent",
-                                
-                            )}
-                            onClick={() => scrollToProject(project.id)}
-                            title={isCollapsed ? project.title : undefined}
-                        >
-                            <Monitor size={isCollapsed ? 20 : 16} className="flex-shrink-0 text-sidebar-foreground"/>
-                            <span className={cn(
-                                "ml-2 truncate text-left transition-opacity duration-300 text-sidebar-foreground",
-                                isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
-                            )}>
-                                {project.title}
-                            </span>
-                            {activeProjectId === project.id && expandedProjects.includes(project.id) && !isCollapsed && (
-                                <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
-                            )}
-                        </button>
-                    ))}
+                    {navigationSections.map((section) => {
+                        const sectionProjects = projects.filter(project => project.category === section.id);
+                        if (sectionProjects.length === 0) return null;
+                        const SectionIcon = section.icon;
+
+                        return (
+                            <div key={section.id} className="mt-2">
+                                <button
+                                    className={cn(
+                                        "nav-button flex w-full items-center rounded-md py-2 transition-colors hover:bg-sidebar-accent",
+                                        isCollapsed ? "justify-center px-2" : "px-3 justify-start",
+                                        activeSection === section.id && "bg-primary/15 text-primary"
+                                    )}
+                                    onClick={() => scrollToSection(`${section.id}-projects-section`)}
+                                    title={isCollapsed ? section.title : undefined}
+                                >
+                                    <SectionIcon size={isCollapsed ? 20 : 16} className={cn("flex-shrink-0", section.id === 'gameplay' ? "text-accent" : "text-primary")} />
+                                    <span className={cn(
+                                        "ml-2 truncate text-left text-xs font-semibold uppercase tracking-wide transition-opacity duration-300",
+                                        isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
+                                    )}>
+                                        {section.title}
+                                    </span>
+                                </button>
+
+                                {sectionProjects.map((project) => (
+                                    <button
+                                        key={project.id}
+                                        className={cn(
+                                            "nav-button my-1 flex w-full items-center rounded-md border border-border/40 bg-background/40 py-2 transition-colors hover:bg-sidebar-accent",
+                                            isCollapsed ? "justify-center px-2" : "pl-6 pr-2 justify-start",
+                                            activeProjectId === project.id && expandedProjects.includes(project.id)
+                                                ? "bg-primary/20 text-primary border-primary"
+                                                : expandedProjects.includes(project.id)
+                                                    ? "bg-accent/5 text-accent border-accent/20"
+                                                    : "hover:bg-sidebar-accent"
+                                        )}
+                                        onClick={() => scrollToProject(project.id)}
+                                        title={isCollapsed ? project.title : undefined}
+                                    >
+                                        <Monitor size={isCollapsed ? 18 : 14} className="flex-shrink-0 text-sidebar-foreground"/>
+                                        <span className={cn(
+                                            "ml-2 truncate text-left text-sm transition-opacity duration-300 text-sidebar-foreground",
+                                            isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
+                                        )}>
+                                            {project.title}
+                                        </span>
+                                        {activeProjectId === project.id && expandedProjects.includes(project.id) && !isCollapsed && (
+                                            <ChevronRight className="ml-auto text-sidebar-foreground" size={16} />
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>

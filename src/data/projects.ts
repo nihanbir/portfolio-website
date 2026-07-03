@@ -6,6 +6,8 @@ export const projects: Project[] = [
         id: "7",
         title: "Campaign2028",
         featured: true,
+        category: "engineering",
+        featuredLabel: "Featured Engineering Project",
         projectType: "Commercial Client Project",
         status: "In Development",
         releasePlan: "Planned for App Store release",
@@ -131,6 +133,8 @@ export const projects: Project[] = [
     {
         id: "1",
         title: "Cloven Blade",
+        category: "gameplay",
+        featuredLabel: "Featured Gameplay Project",
         technologies: [
             "Unreal Engine 5",
             "C++",
@@ -244,6 +248,7 @@ export const projects: Project[] = [
     {
         id: "2",
         title: "Horpus",
+        category: "gameplay",
         technologies: ["Unreal Engine 5", "Blueprints", "Jira", "GitHub"],
         shortDescription: "A cute horror prototype focused on stealth gameplay, cat AI behaviour, and interactable hiding systems.",
         role: ["Gameplay Programmer"],
@@ -329,6 +334,7 @@ export const projects: Project[] = [
     {
         id: "3",
         title: "Algorithms & Data Structures",
+        category: "engineering",
         technologies: ["Unity", "C#", "C++", "GitHub"],
         shortDescription: "A pathfinding and algorithms project featuring a modified BFS solution for weighted grid traversal with changing constraints.",
         role: ["Gameplay Programmer"],
@@ -495,6 +501,7 @@ public static class Pathfinder
     {
         id: "4",
         title: "Klicker",
+        category: "engineering",
         technologies: ["SDL", "C++"],
         shortDescription: "A small SDL/C++ clicker game built to practice design patterns, runtime polymorphism, and ownership with smart pointers.",
         role: ["Gameplay Programmer"],
@@ -676,6 +683,7 @@ int main(int argc, char* args[])
     {
         id: "5",
         title: "Slappy Knut",
+        category: "gameplay",
         technologies: ["Unity", "C#", "Trello", "GitHub"],
         shortDescription: "My first team-based Unity project, where I worked on character control, combat, spells, items, project structure, and production coordination.",
         role: ["Product Owner", "Gameplay Programmer"],
@@ -764,6 +772,7 @@ int main(int argc, char* args[])
     {
         id: "6",
         title: "sk8escape",
+        category: "engineering",
         technologies: ["Unity", "C#", "Firebase", "Jira", "GitHub", "Google Play Console"],
         shortDescription: "Backend architecture for a Unity mobile game using Firebase, cloud saves, authentication, analytics, and Google Play integration.",
         role: ["Backend"],

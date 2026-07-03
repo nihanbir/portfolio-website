@@ -30,7 +30,7 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
           <h1 className="text-2xl font-bold mr-4 text-primary">Nihan Flärd</h1>
-          <span className="hidden md:inline-block text-muted-foreground">Game Programmer</span>
+          <span className="hidden md:inline-block text-muted-foreground">Gameplay &amp; Systems Programmer</span>
         </div>
 
         <div className="flex items-center space-x-4">
