@@ -118,38 +118,71 @@ export const projects: Project[] = [
     {
         id: "2",
         title: "Horpus",
-        technologies: ["Unreal Engine 5", "Blueprints", "Jira", "Github", "AI"],
-        shortDescription: "This cute horror game is my first completed Unreal project. I worked on AI, environment and interactable items",
+        technologies: ["Unreal Engine 5", "Blueprints", "Jira", "GitHub"],
+        shortDescription: "A cute horror prototype focused on stealth gameplay, cat AI behaviour, and interactable hiding systems.",
         role: ["Gameplay Programmer"],
-        fullDescription:
-        
-            "The complete game is about a person being trapped on the top floor of their 5 story " +
-            "apartment building with different monsters on each floor for them to dodge/escape from, by using traps, " +
-            "lures, sneaking techniques and equipment. This prototype has a house with a long corridor and a not so " +
-            "terrifying monster AI to show what the game could be like. The game was built with an expectation of expanding " +
-            "the game play in the future.\n"+
-            
-            "My work: \n"+
-           
-            "- Cat AI in general but also these highlights;\n"+
-            "  - The cat can open the doors;\n" +
-            "    - if it's investigating the player's whereabouts or \n" +
-            "    - if it has seen the player walk in to that room.\n" +
-            "  - The cat can hear the step sounds if the door is left open.\n" +
-            "  - It hears heavy breathing if it's close enough but not through walls.\n"+
-            
-            "- Environment;\n"+
-            "  - Building the level;\n"+
-            "  - Contributed to dynamic hiding Places;\n"+
-            
-            "- The player sneak mechanics;\n" +
-            "  - Hold breath,\n" +
-            "  - Crouch,\n" +
-            "  - Equippable items,\n" +
-            "  - Lures\n"+
-            "    - For example;\n"+
-            "    - Higher sneak level and wearing shoes will lower the player's step sounds.\n" +
-            "    - The cat prioritizes the catnip over the player if it encounters it\n",
+        overview: "Horpus is a cute horror prototype built in Unreal Engine 5 using Blueprints. As Gameplay Programmer, I focused on the cat AI, player stealth mechanics, interactable hiding and lure systems, and the environment supporting the prototype's stealth gameplay loop.",
+        keyTakeaways: [
+            "AI Behaviour",
+            "Stealth Gameplay",
+            "Interactable Systems",
+            "Blueprints",
+            "Level Design"
+        ],
+        systemsImplemented: [
+            "Cat AI behaviour including investigation, pursuit, and player tracking",
+            "Door interaction logic for AI, including opening doors when investigating the player or following player movement",
+            "Sound-based detection for player footsteps when doors are open",
+            "Breathing detection based on proximity and line-of-sight limitations",
+            "Player stealth mechanics including crouching, holding breath, sneak level, and equipment-based sound modifiers",
+            "Dynamic hiding interactions",
+            "Interactable lure system using catnip to redirect AI priority",
+            "Level layout and environment setup for the prototype"
+        ],
+        technicalHighlights: [
+            {
+                title: "AI Behaviour System",
+                description: "Implemented cat AI behaviour that could investigate the player's location, react to player movement, open doors, and transition between detection and pursuit behaviours."
+            },
+            {
+                title: "Sound-based Detection",
+                description: "Built stealth detection logic where the AI could hear player footsteps depending on environmental conditions, such as whether a door was left open."
+            },
+            {
+                title: "Proximity-based Breathing Detection",
+                description: "Implemented breathing detection where the AI could detect the player at close range while respecting walls and spatial separation."
+            },
+            {
+                title: "AI Priority and Lure Behaviour",
+                description: "Implemented catnip lure behaviour that could override the AI's focus on the player, allowing the lure to become a higher-priority target when encountered."
+            },
+            {
+                title: "Player Stealth Mechanics",
+                description: "Implemented player stealth features including crouching, holding breath, equipment-based sound changes, and sneak-level modifiers that affected AI detection."
+            },
+            {
+                title: "Dynamic Hiding Interactions",
+                description: "Contributed to hiding systems that allowed the player to use environment objects as stealth options during AI encounters."
+            }
+        ],
+        technicalChallenges: [
+            {
+                challenge: "Creating believable stealth AI in a small prototype",
+                solution: "Combined multiple detection inputs including sight, footsteps, breathing proximity, door state, and lure priority to make the AI feel reactive without requiring a large-scale AI framework.",
+                result: "The prototype demonstrated a clear stealth gameplay loop where player choices affected AI detection and behaviour."
+            },
+            {
+                challenge: "Making environmental state matter to AI behaviour",
+                solution: "Implemented door-aware detection and AI door interaction logic so the cat could respond differently depending on whether rooms were accessible, visible, or acoustically connected.",
+                result: "Doors became part of the stealth system instead of simple static environment props."
+            }
+        ],
+        additionalResponsibilities: [
+            "Built and arranged the prototype level environment.",
+            "Worked on dynamic hiding places and interactable gameplay objects.",
+            "Integrated player sneak mechanics with AI detection behaviour.",
+            "Used Jira and GitHub for project tracking and collaboration."
+        ],
         
         images: {
             main: 'https://github.com/nihanbir/portfolio-website/blob/main/src/media/projects/horpus/PussInGardenGif.gif?raw=true',
