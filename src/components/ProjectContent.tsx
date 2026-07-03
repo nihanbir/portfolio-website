@@ -7,17 +7,15 @@ interface ProjectContentProps {
 }
 
 export function ProjectContent({ project }: ProjectContentProps) {
-    const overview = project.overview ?? project.fullDescription;
-
     return (
         <div className="mt-6 space-y-8">
-            {overview && (
+            {project.overview && (
                 <section aria-labelledby={`overview-${project.id}`}>
                     <h3 id={`overview-${project.id}`} className="text-lg sm:text-xl font-semibold mb-3">
                         Overview
                     </h3>
                     <p className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base">
-                        {overview}
+                        {project.overview}
                     </p>
                 </section>
             )}

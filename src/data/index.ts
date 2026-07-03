@@ -17,8 +17,6 @@ export interface Project {
         }[];
         additionalResponsibilities?: string[];
         lessonsLearned?: string[];
-        /** Temporary compatibility field while older projects are migrated. */
-        fullDescription?: string;
         role: string[];
         images: {
                 main: string;
