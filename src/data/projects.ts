@@ -11,7 +11,7 @@ export const projects: Project[] = [
             "Primary Gameplay Programmer"],
         teamSize: "most of the time 6 people",
         fullDescription:
-            "As the scrum master and primary programmer, I coordinated the development of the vertical slice, working closely with artists, designers, and management to ensure the vision was realized.\n" +
+            "Cloven Blade is a Side scrolling beat 'em up game developed in Unreal Engine 5. As the project's Scrum Master and Primary Gameplay Programmer, I was responsible for leading development while implementing core gameplay systems in C++. I coordinated a multidisciplinary team throughout the production of a vertical slice, ensuring both technical and production goals were met.\n" +
             "Programming (C++ / UE5.4):\n" +
             "• Developed core gameplay mechanics using C++ in Unreal Engine 5.\n" +
             "• Implemented key features like [combat system, player movement, AI, environment interactions, etc.]\n" +
