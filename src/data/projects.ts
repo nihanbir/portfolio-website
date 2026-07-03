@@ -370,26 +370,64 @@ public static class Pathfinder
         id: "4",
         title: "Klicker",
         technologies: ["SDL", "C++"],
-        shortDescription: "Simple clicker game made to learn and utilize design patterns and advanced C++ features.",
+        shortDescription: "A small SDL/C++ clicker game built to practice design patterns, runtime polymorphism, and ownership with smart pointers.",
         role: ["Gameplay Programmer"],
-        fullDescription:
-
-            "The game is made with SDL using;\n" +
-            "• Design Patterns:\n" +
-            "  • State design pattern \n" +
-            "Each door is independent of each other and has 2 states, open and closed. " +
-            "This pattern helps make the game scalable if you want to increase the complexity. (eg. LockedDoorState)\n" +
-            "  • Update design pattern\n" +
-            "Since every door is independent of each other, it makes sense for each door " +
-            "to update their own state instead of listing all the updates in the main loop. This pattern also helps making the game scalable.\n" +
-            "• Advanced C++ Features:\n" +
-            "  • Vectors\n" +
-            "For scalable collection of the doors.\n" +
-            "It solves the problem of making it easier to scale the amount of functional doors in the future.\n" +
-            "  • Runtime polymorphism\n" +
-            "To change the state of the doors.\n" +
-            "Required by the state design pattern.\n",
-            
+        overview: "Klicker is a small SDL/C++ clicker game built as a focused architecture exercise. Its interactive doors provided a compact gameplay context for practicing the State pattern, runtime polymorphism, container-based object handling, and explicit ownership with smart pointers.",
+        keyTakeaways: [
+            "C++",
+            "SDL",
+            "State Pattern",
+            "Runtime Polymorphism",
+            "Smart Pointers"
+        ],
+        systemsImplemented: [
+            "Interactive clickable doors",
+            "Independent door state handling",
+            "Open and closed door states",
+            "Mouse hover detection",
+            "Input-driven state transitions",
+            "Door collection using vectors",
+            "Object ownership using unique_ptr"
+        ],
+        technicalHighlights: [
+            {
+                title: "State Pattern",
+                description: "Implemented each door using separate open and closed states, allowing door behaviour to change based on its current state while keeping transition logic organized and extensible."
+            },
+            {
+                title: "Runtime Polymorphism",
+                description: "Used polymorphic door state classes to allow doors to transition between behaviours at runtime without hard-coding every state case inside the main game loop."
+            },
+            {
+                title: "Smart Pointer Ownership",
+                description: "Used unique_ptr to express ownership of door objects and door states, reducing manual memory management while practicing modern C++ patterns."
+            },
+            {
+                title: "Scalable Door Handling",
+                description: "Stored doors in a vector so new interactive doors could be added without changing the main input loop structure."
+            },
+            {
+                title: "Input-driven Interaction",
+                description: "Implemented mouse position checks and click handling so each door could independently determine whether it should react to player input."
+            }
+        ],
+        technicalChallenges: [
+            {
+                challenge: "Avoiding hard-coded door logic",
+                solution: "Moved door behaviour into state classes so each door could handle its own transitions instead of managing all door cases directly in the main loop.",
+                result: "The project became easier to extend with additional door states such as locked or animated doors."
+            },
+            {
+                challenge: "Practicing safe ownership in C++",
+                solution: "Used unique_ptr for doors and state transitions to make ownership clear and reduce reliance on manual allocation and deletion.",
+                result: "The project provided practical experience with modern C++ ownership patterns in a small gameplay context."
+            }
+        ],
+        additionalResponsibilities: [
+            "Built the project as a focused C++ practice exercise.",
+            "Used SDL for rendering, input handling, and window management.",
+            "Created code snippets demonstrating the door state system and input-driven update loop."
+        ],
 
         images: {
             main: 'https://user-images.githubusercontent.com/112477158/232321356-97aa747b-8f79-432d-9434-2f6d56157326.gif',
