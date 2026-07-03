@@ -31,12 +31,12 @@ const About = () => {
         {/* About Card */}
         <Card className="bg-card/50 backdrop-blur-sm md:col-span-2">
           <CardHeader>
-            <CardTitle>My Background</CardTitle>
+            <CardTitle>About Me</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground mb-4">
-              Hi there! I'm a social and organized game programming graduate with a year of
-              hands-on experience in C++ and Unreal Engine 5, as well as a Certified Scrum Master.
+                Gameplay Programmer with professional experience in Unreal Engine 5 and Unity. I enjoy building gameplay systems, 
+                multiplayer features, and tools that help create polished player experiences.
             </p>
             <p className="text-muted-foreground mb-4">
               Coming from a background in aviation, I'm exploring my life long dream of working
