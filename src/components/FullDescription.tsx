@@ -75,16 +75,9 @@ export function FullDescription({ introText, sections, projectId, isExpanded, on
                                         !isSectionExpanded && "hidden"
                                     )}
                                 >
-                                    <div
-                                        className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base"
-                                        dangerouslySetInnerHTML={{
-                                            __html: section.content
-                                                .replace(/\n {2}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;• ')
-                                                .replace(/\n {4}- /g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• ')
-                                                .replace(/\n- /g, '<br>• ')
-                                                .replace(/^\s*- /gm, '• ')
-                                        }}
-                                    />
+                                    <p className="text-foreground/90 leading-relaxed whitespace-pre-line text-sm sm:text-base">
+                                        {section.content}
+                                    </p>
                                 </div>
                             </div>
                         );

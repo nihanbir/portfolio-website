@@ -5,37 +5,110 @@ export const projects: Project[] = [
     {
         id: "1",
         title: "Cloven Blade",
-        technologies: ["Unreal Engine 5", "C++", "GAS", "Jira", "Confluence", "Github", "Perforce"],
-        shortDescription: "Side scrolling beat 'em up game Vertical Slice Development at Ballistic Pork, As the scrum master and primary programmer.",
-        role: ["Scrum Master " ,
-            "Primary Gameplay Programmer"],
-        teamSize: "most of the time 6 people",
-        fullDescription:
-            "Cloven Blade is a Side scrolling beat 'em up game developed in Unreal Engine 5. As the project's Scrum Master and Primary Gameplay Programmer, I was responsible for leading development while implementing core gameplay systems in C++. I coordinated a multidisciplinary team throughout the production of a vertical slice, ensuring both technical and production goals were met.\n" +
-            "Programming (C++ / UE5.4):\n" +
-            "• Developed core gameplay mechanics using C++ in Unreal Engine 5.\n" +
-            "• Implemented key features like [combat system, player movement, AI, environment interactions, etc.]\n" +
-            "• Integrated animations, physics, and UI elements with the game loop.\n" +
-            "• Debugged and optimized the code for performance, ensuring smooth gameplay within the vertical slice.\n" +
-            "Team Leadership and Management:\n" +
-            "• Acted as the primary point of communication between the development team and management.\n" +
-            "• Organized daily standups, managed tasks in Jira, and ensured milestones were met.\n" +
-            "• Collaborated with external consultants to integrate third-party systems and tools.\n" +
-            "• Handled interpersonal conflicts between team members, maintaining team cohesion and focus on the project’s goals.\n" +
-            "Collaboration with Art & Design:\n" +
-            "• Worked closely with artists to integrate assets into the game, ensuring consistency with the game’s theme and mechanics.\n" +
-            "• Collaborated on animation systems, particle effects, and environmental design.\n" +
-            "• Ensured that all gameplay mechanics were cohesive with the game’s artistic direction and design vision.\n" +
-            "Problem-Solving & Conflict Resolution:\n" +
-            "• Navigated conflicts within the team, particularly with team members lacking motivation, and found solutions that kept the project on track.\n" +
-            "• Addressed technical challenges, such as the team not being able to fully utilize the Lyra Sample Project, and implemented effective solutions to work around these limitations.\n" +
-            "Utilizing design patterns, where it's applicable:\n" +
-            " \n" +
-            "• The observer pattern in multi-use components to enhance communication and adaptability, allowing for versatile functionality in different game scenarios.\n" +
-            " \n" +
-            "• The template method pattern in the player class to define a structure for character behavior, allowing for customization of specific actions within subclasses for a flexible and extensible player system.\n" +
-            " \n" +
-            "• The object pool pattern for the inventory system, optimizing resource management by reusing and recycling inventory items.",
+        technologies: [
+            "Unreal Engine 5",
+            "C++",
+            "GAS",
+            "Jira",
+            "Confluence",
+            "GitHub",
+            "Perforce",
+        ],
+
+        shortDescription:
+            "A side-scrolling beat 'em up vertical slice developed at Ballistic Pork, where I served as Primary Gameplay Programmer and Scrum Master.",
+
+        role: [
+            "Primary Gameplay Programmer",
+            "Scrum Master",
+        ],
+
+        teamSize: "Approximately 6 developers",
+
+        overview:
+            "Cloven Blade is a side-scrolling beat 'em up vertical slice developed in Unreal Engine 5. As Primary Gameplay Programmer, I owned the implementation of the project's gameplay layer in C++, translating gameplay design requirements into scalable technical systems while integrating animation, audio, physics, UI, AI, and Gameplay Ability System functionality. Alongside gameplay programming, I also served as Scrum Master throughout development.",
+
+        keyTakeaways: [
+            "C++ Gameplay Programming",
+            "Gameplay Ability System",
+            "Gameplay Architecture",
+            "AI Programming",
+            "Developer Tooling",
+        ],
+
+        systemsImplemented: [
+            "Character controller including movement, jumping, coyote jump, dashing, hook mechanics, wall running, wall jumping, wall dashing, and edge grabbing",
+            "Combat systems including attacks, combos, weapons, gameplay abilities, invincibility, and immunity",
+            "Enemy AI including patrol, combat, attack behaviour, ranged enemies, upper-body aiming, and gameplay object interactions",
+            "Gameplay Ability System integration",
+            "Inventory system with reusable item objects",
+            "Interactables including pickups, hiding barrels, smoke bombs, and shurikens",
+            "Gameplay collision and combat state management",
+            "Animation, audio, physics, particle effect, and UI integration",
+            "Developer tooling for animation-driven gameplay events",
+        ],
+
+        technicalHighlights: [
+            {
+                title: "Gameplay Systems",
+                description:
+                    "Owned the implementation of the gameplay layer in C++, translating gameplay design requirements into scalable technical systems. Implemented player mechanics, combat, AI, Gameplay Ability System integration, interactables, inventory, gameplay state management, and reusable gameplay frameworks while supporting rapid iteration throughout development.",
+            },
+            {
+                title: "Character Movement Systems",
+                description:
+                    "Implemented a modular character controller supporting movement, jumping, coyote jump, dashing, hook mechanics, wall running, wall jumping, wall dashing, and edge grabbing. Solved gameplay edge cases such as preventing infinite wall jumps while maintaining responsive player controls.",
+            },
+            {
+                title: "Template Method Pattern",
+                description:
+                    "Implemented shared character behaviour through a common base character class while allowing derived character types to customize specific gameplay actions through inheritance. This provided a consistent gameplay flow while making it straightforward to extend the system with new player and AI behaviours.",
+            },
+            {
+                title: "Observer Pattern",
+                description:
+                    "Implemented event-driven communication between reusable gameplay components to reduce coupling and allow gameplay systems to react to state changes without direct dependencies.",
+            },
+            {
+                title: "Object Pool Pattern",
+                description:
+                    "Implemented object pooling for inventory items by recycling object instances instead of repeatedly allocating and destroying them, reducing runtime allocations while providing a reusable foundation for gameplay objects.",
+            },
+            {
+                title: "Animation-driven Gameplay Framework",
+                description:
+                    "Developed reusable animation tooling that enabled gameplay effects and abilities to be activated and deactivated through configurable animation frame windows. Gameplay events generated by these windows could also be observed independently by other gameplay systems through event-driven communication, providing a flexible foundation for attacks, hit detection, invincibility, abilities, and other time-sensitive gameplay mechanics.",
+            },
+            {
+                title: "Gameplay System Integration",
+                description:
+                    "Integrated artist-created animations, audio, UI, particle effects, and gameplay assets into Unreal Engine, ensuring new content functioned correctly within gameplay systems while collaborating closely with artists and designers throughout development.",
+            },
+        ],
+
+        technicalChallenges: [
+            {
+                challenge: "Multiple project restarts and changing technical direction",
+                solution:
+                    "The project was restarted several times and transitioned from a pure C++ architecture to Lyra before ultimately adopting a Gameplay Ability System-based solution. I continuously adapted and reimplemented gameplay systems to support the project's evolving technical direction while maintaining development momentum.",
+                result:
+                    "Despite multiple architectural changes, the team successfully delivered the vertical slice with a maintainable gameplay framework that supported continued feature development.",
+            },
+            {
+                challenge: "Supporting complex gameplay interactions",
+                solution:
+                    "Designed and implemented gameplay state handling for collisions, invincibility, immunity, AI interactions, animation timing, and movement edge cases while developing reusable tooling for animation-driven gameplay events.",
+                result:
+                    "Gameplay systems behaved consistently across a wide variety of combat and movement scenarios while reducing repetitive implementation work and improving iteration speed during development.",
+            },
+        ],
+
+        additionalResponsibilities: [
+            "Served as Scrum Master throughout development, facilitating daily stand-ups, sprint planning, and production tracking in Jira.",
+            "Coordinated communication between programmers, artists, designers, management, and external consultants.",
+            "Integrated artist-created animations, audio, UI, particle effects, and environment assets into gameplay systems.",
+            "Helped maintain team alignment and delivery throughout multiple project restarts and changing technical direction.",
+        ],
         images: {
             main: 'https://impro.usercontent.one/appid/oneComWsb/domain/ballisticpork.se/media/ballisticpork.se/onewebmedia/banner_clovenblade_hamlet_01.png?etag=W%2F%22745ba-678b87d4%22&sourceContentType=image%2Fpng&ignoreAspectRatio&resize=1178%2B578',
             gallery: [            ],

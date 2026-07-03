@@ -3,7 +3,22 @@ export interface Project {
         title: string;
         technologies: string[];
         shortDescription: string;
-        fullDescription: string;
+        overview?: string;
+        keyTakeaways?: string[];
+        systemsImplemented?: string[];
+        technicalHighlights?: {
+                title: string;
+                description: string;
+        }[];
+        technicalChallenges?: {
+                challenge: string;
+                solution: string;
+                result?: string;
+        }[];
+        additionalResponsibilities?: string[];
+        lessonsLearned?: string[];
+        /** Temporary compatibility field while older projects are migrated. */
+        fullDescription?: string;
         role: string[];
         images: {
                 main: string;

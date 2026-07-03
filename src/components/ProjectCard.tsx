@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Button } from "@/components/ui/button.tsx";
 import { ImageGallery } from "@/components/ImageGallery.tsx";
 import { MiniImageGallery } from "@/components/MiniImageGallery.tsx";
-import { FullDescription } from "@/components/FullDescription.tsx";
+import { ProjectContent } from "@/components/ProjectContent.tsx";
 import { CodeSnippets } from "@/components/CodeSnippets.tsx";
 import { Project } from '@/data';
 
@@ -18,7 +18,6 @@ export interface ProjectCardProps {
 
 export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCardProps) {
     const [height, setHeight] = useState<number | null>(null);
-    const [fullDescriptionHeight, setFullDescriptionHeight] = useState<number>(0); // Track FullDescription height
     const contentRef = useRef<HTMLDivElement>(null);
     const [showAdditionalText, setShowAdditionalText] = useState(false);
     const [codeSnippetsExpanded, setCodeSnippetsExpanded] = useState(false);
@@ -31,16 +30,13 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
     useEffect(() => {
         if (contentRef.current && isExpanded) {
             const timer = setTimeout(() => {
-                const totalHeight = contentRef.current.scrollHeight + fullDescriptionHeight;
-                setHeight(totalHeight);
+                setHeight(contentRef.current.scrollHeight);
             }, 0);
             return () => clearTimeout(timer);
         } else {
             setHeight(null);
         }
-    }, [isExpanded, project, showAdditionalText, codeSnippetsExpanded, fullDescriptionHeight]);
-
-    const { introText, sections } = parseDescriptionSections(project);
+    }, [isExpanded, project, showAdditionalText, codeSnippetsExpanded]);
 
     return (
         <div
@@ -97,17 +93,20 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                         />
                     </div>
 
-                    <FullDescription
-                        introText={introText}
-                        sections={sections}
-                        projectId={project.id}
-                        isExpanded={isExpanded}
-                        onHeightChange={setFullDescriptionHeight} // Pass the height change callback
-                    />
+                    <ProjectContent project={project} />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
+                    {project.codeSnippets && project.codeSnippets.length > 0 && (
+                        <div className="mt-8">
+                            <CodeSnippets
+                                codeSnippets={project.codeSnippets}
+                                onExpandChange={setCodeSnippetsExpanded}
+                            />
+                        </div>
+                    )}
+
+                    <section className="mt-8" aria-labelledby={`details-${project.id}`}>
                         <div className="space-y-4">
-                            <h3 className="text-lg sm:text-xl font-semibold">Project Details</h3>
+                            <h3 id={`details-${project.id}`} className="text-lg sm:text-xl font-semibold">Project Details</h3>
                             <div className="space-y-2">
                                 {project.role && (
                                     <div className="flex items-center text-sm">
@@ -159,13 +158,7 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
                             </div>
                         </div>
 
-                        {project.codeSnippets && project.codeSnippets.length > 0 && (
-                            <CodeSnippets
-                                codeSnippets={project.codeSnippets}
-                                onExpandChange={(expanded) => setCodeSnippetsExpanded(expanded)}
-                            />
-                        )}
-                    </div>
+                    </section>
 
                     {project.additionalText && (
                         <div className="p-4 sm:p-6 border-b border-border overflow-y-auto">
@@ -213,60 +206,4 @@ export function ProjectCard({ project, isExpanded, onToggleExpand }: ProjectCard
             </div>
         </div>
     );
-}
-
-// Helper function to parse description sections
-function parseDescriptionSections(project: Project) {
-    if (!project.fullDescription) return { introText: '', sections: [] };
-
-    const lines = project.fullDescription.split('\n');
-    let introText = '';
-    const sections: { title: string; content: string }[] = [];
-
-    let currentTitle = '';
-    let currentContent: string[] = [];
-    let parsingIntro = true;
-
-    lines.forEach(line => {
-        const isTitleLine = line.trim().endsWith(':') ||
-            (line.trim() === line.trim().toUpperCase() && line.trim().length > 3);
-
-        if (isTitleLine) {
-            parsingIntro = false;
-
-            if (currentTitle && currentContent.length) {
-                sections.push({
-                    title: currentTitle,
-                    content: currentContent.join('\n')
-                });
-                currentContent = [];
-            }
-            currentTitle = line.trim();
-        } else if (line.trim() || (currentContent.length > 0 && line === '')) {
-            if (parsingIntro && sections.length === 0 && !currentTitle) {
-                introText += (introText ? '\n' : '') + line;
-            } else {
-                currentContent.push(line);
-            }
-        }
-    });
-
-    if (currentTitle && currentContent.length) {
-        sections.push({
-            title: currentTitle,
-            content: currentContent.join('\n')
-        });
-    }
-
-    if (sections.length === 0 && project.fullDescription.trim() && !introText) {
-        return {
-            introText: '',
-            sections: [{
-                title: 'Overview',
-                content: project.fullDescription
-            }]
-        };
-    }
-
-    return { introText, sections };
 }
